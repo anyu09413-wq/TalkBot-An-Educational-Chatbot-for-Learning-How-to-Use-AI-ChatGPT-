@@ -1,222 +1,226 @@
-/* --- Global Reset & Fonts --- */
+/* --- 1. Variables & Global Setup --- */
 :root {
-    --primary-purple: #9d81ff;
-    --accent-pink: #ff8fb1;
-    --glass-bg: rgba(255, 255, 255, 0.75);
-    --text-dark: #2d3436;
-    --bot-bubble: #ffffff;
-    --user-bubble: #9d81ff;
+    --primary: #9d81ff;       /* Soft Purple */
+    --accent: #ff8fb1;        /* Soft Pink */
+    --bg-light: #f8f9ff;
+    --text-main: #2d3436;
+    --text-muted: #636e72;
+    --glass: rgba(255, 255, 255, 0.8);
+    --white: #ffffff;
+    --success: #00b894;
 }
 
 * {
     box-sizing: border-box;
-    -webkit-font-smoothing: antialiased;
+    transition: all 0.3s ease;
 }
 
 body {
     margin: 0;
-    padding: 0;
-    font-family: 'Plus Jakarta Sans', 'Quicksand', sans-serif;
-    background: radial-gradient(circle at top left, #fdf2f8, #f5f3ff);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: linear-gradient(135deg, #fdf2f8 0%, #f5f3ff 100%);
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
+    overflow: hidden; /* Keeps the dashboard fixed */
+    color: var(--text-main);
 }
 
-/* --- The Floating Background Blur --- */
-body::before {
-    content: '';
+/* --- 2. Decorative Background --- */
+.bg-blob {
     position: absolute;
-    width: 400px;
-    height: 400px;
-    background: var(--primary-purple);
-    filter: blur(120px);
-    opacity: 0.15;
+    width: 600px;
+    height: 600px;
+    background: var(--primary);
+    filter: blur(150px);
+    opacity: 0.1;
     z-index: -1;
-    top: 10%;
-    left: 10%;
+    top: -150px;
+    left: -150px;
 }
 
-/* --- Main Profile Dashboard Card --- */
-.profile-container {
-    width: 95%;
-    max-width: 450px;
-    height: 85vh;
-    background: var(--glass-bg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: 40px;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 0 25px 50px -12px rgba(157, 129, 255, 0.2);
+/* --- 3. Main Dashboard Layout --- */
+.dashboard {
+    width: 95vw;
+    height: 90vh;
+    display: flex;
+    gap: 20px;
+    padding: 10px;
+}
+
+/* Panels */
+.side-panel {
+    width: 300px;
     display: flex;
     flex-direction: column;
+    gap: 20px;
+}
+
+.main-chat {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: var(--glass);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border-radius: 32px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 20px 60px rgba(157, 129, 255, 0.1);
     overflow: hidden;
 }
 
-/* --- Header Section --- */
-.profile-header {
-    padding: 25px;
+/* --- 4. Glass Cards (Sidebars) --- */
+.glass-card {
+    background: var(--glass);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.card-title {
+    font-size: 1rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--primary);
+}
+
+/* --- 5. Chat Interface --- */
+.chat-header {
+    padding: 20px 30px;
+    background: rgba(255, 255, 255, 0.4);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: rgba(255, 255, 255, 0.3);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-.bot-identity {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.avatar-glow {
-    width: 50px;
-    height: 50px;
-    background: linear-gradient(135deg, var(--primary-purple), var(--accent-pink));
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.8rem;
-    box-shadow: 0 8px 15px rgba(157, 129, 255, 0.3);
-}
-
-.id-text h1 {
-    margin: 0;
-    font-size: 1.2rem;
-    color: var(--text-dark);
-    font-weight: 800;
-}
-
-.id-text h1 span {
-    font-size: 0.65rem;
-    color: var(--primary-purple);
-    background: #f1eeff;
-    padding: 2px 6px;
-    border-radius: 6px;
-    margin-left: 5px;
-}
-
-.id-text p {
-    margin: 0;
-    font-size: 0.8rem;
-    color: #636e72;
-    font-weight: 500;
-}
-
-/* --- Chat Display Portal --- */
 .chat-portal {
     flex: 1;
-    padding: 20px;
+    padding: 30px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
     gap: 15px;
-    scrollbar-width: none; /* Hide scrollbar for Firefox */
+    scroll-behavior: smooth;
 }
 
-.chat-portal::-webkit-scrollbar {
-    display: none; /* Hide scrollbar for Chrome/Safari */
-}
+/* Hide Scrollbar */
+.chat-portal::-webkit-scrollbar { display: none; }
 
-/* --- Message Bubbles --- */
+/* Bubbles */
 .msg {
-    max-width: 85%;
-    padding: 14px 18px;
+    max-width: 80%;
+    padding: 16px 20px;
     border-radius: 22px;
     font-size: 0.95rem;
-    line-height: 1.5;
-    position: relative;
-    animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    line-height: 1.6;
+    animation: fadeInUp 0.4s ease forwards;
 }
 
 .bot {
-    background: var(--bot-bubble);
-    color: var(--text-dark);
+    background: var(--white);
     align-self: flex-start;
     border-bottom-left-radius: 4px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
 }
 
 .user {
-    background: var(--user-bubble);
-    color: white;
+    background: var(--primary);
+    color: var(--white);
     align-self: flex-end;
     border-bottom-right-radius: 4px;
-    box-shadow: 0 4px 15px rgba(157, 129, 255, 0.2);
 }
 
-/* --- Action Center (Footer) --- */
-.action-center {
-    padding: 20px 25px 30px;
-    background: white;
-    border-top: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-.instruction {
-    font-size: 0.75rem;
-    color: #b2bec3;
-    font-weight: 800;
-    text-transform: uppercase;
-    margin-bottom: 12px;
-    letter-spacing: 1px;
-}
-
-/* --- Grid Options (The Clickable Interface) --- */
-.options-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+/* --- 6. Interaction Elements --- */
+.options-area {
+    padding: 15px 30px;
+    display: flex;
+    flex-wrap: wrap;
     gap: 10px;
+    background: rgba(255, 255, 255, 0.2);
 }
 
 .choice-btn {
-    background: #fcfcfc;
-    border: 2px solid transparent;
-    padding: 12px 10px;
-    border-radius: 16px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--text-dark);
+    background: var(--white);
+    border: 2px solid var(--primary);
+    color: var(--primary);
+    padding: 10px 20px;
+    border-radius: 14px;
+    font-weight: 700;
     cursor: pointer;
-    transition: all 0.25s ease;
-    text-align: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    font-size: 0.85rem;
 }
 
 .choice-btn:hover {
-    border-color: var(--primary-purple);
-    background: #f1eeff;
-    color: var(--primary-purple);
-    transform: translateY(-3px);
+    background: var(--primary);
+    color: var(--white);
+    transform: translateY(-2px);
 }
 
-.choice-btn:active {
-    transform: translateY(0);
+.input-bar {
+    padding: 20px 30px;
+    background: var(--white);
+    display: flex;
+    gap: 12px;
 }
 
-.restart-link {
-    display: block;
-    width: 100%;
-    background: none;
+#userInput {
+    flex: 1;
+    border: 2px solid #f0f0f0;
+    padding: 14px;
+    border-radius: 16px;
+    outline: none;
+    font-family: inherit;
+}
+
+#userInput:focus { border-color: var(--primary); }
+
+.send-btn {
+    background: var(--primary);
+    color: var(--white);
     border: none;
-    margin-top: 15px;
-    color: #b2bec3;
-    font-size: 0.75rem;
-    text-decoration: underline;
+    padding: 0 25px;
+    border-radius: 16px;
+    font-weight: 700;
     cursor: pointer;
-    font-weight: 600;
 }
 
-/* --- Animations --- */
-@keyframes slideUp {
-    from { opacity: 0; transform: translateY(20px); }
+/* --- 7. Game & Stats --- */
+.progress-container {
+    height: 8px;
+    background: #eee;
+    border-radius: 10px;
+    margin-top: 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--accent);
+    width: 0%;
+    transition: width 0.5s ease-in-out;
+}
+
+.wiki-card {
+    opacity: 0.4;
+    filter: grayscale(1);
+    transition: 0.5s;
+}
+
+.wiki-card.unlocked {
+    opacity: 1;
+    filter: grayscale(0);
+    border: 2px solid var(--accent);
+}
+
+/* --- 8. Animations --- */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(15px); }
     to { opacity: 1; transform: translateY(0); }
-}
-
-/* --- Mobile Responsiveness --- */
-@media (max-height: 700px) {
-    .profile-container { height: 95vh; }
-    .profile-header { padding: 15px 25px; }
 }
