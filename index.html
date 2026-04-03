@@ -3,57 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TalkBot | Your Pink AI Tutor ✨</title>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Anyu's TalkBot | Developer Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    
-    <div class="bg-circle one"></div>
-    <div class="bg-circle two"></div>
-
-    <nav>
-        <div class="logo">TalkBot<span>.pink</span></div>
-        <ul>
-            <li><a href="#" onclick="showSection('home')">Home</a></li>
-            <li><a href="#" onclick="showSection('chat')">Start Learning</a></li>
-        </ul>
-    </nav>
-
-    <section id="home" class="active">
-        <div class="hero">
-            <div class="hero-icon">🤖💖</div>
-            <h1>Master ChatGPT with Fun!</h1>
-            <p>Welcome to the Pink Learning Zone! 🌸 Instead of typing long questions, follow our <b>guided paths</b> to become an AI expert in minutes.</p>
-            <button class="btn-main" onclick="startLearning()">Start My Journey ✨</button>
+    <div class="glass-container">
+        <aside class="profile-side">
+            <div class="avatar">👩‍💻</div>
+            <h2>Anyu Zhang</h2>
+            <p class="tag">Grade 11 Web Dev</p>
+            <p class="bio">Leader of Peer Mediators. Exploring the psychology of AI.</p>
             
-            <div class="features-preview">
-                <span>✓ ChatGPT Secrets</span>
-                <span>✓ Prompt Games</span>
-                <span>✓ Safety Tips</span>
-            </div>
-        </div>
-    </section>
+            <nav class="profile-nav">
+                <button onclick="showSection('home')" class="nav-item">🏠 Home</button>
+                <button onclick="showSection('chat')" class="nav-item active">🤖 TalkBot AI</button>
+                <button class="nav-item">📚 My Projects</button>
+            </nav>
+        </aside>
 
-    <section id="chat">
-        <div class="chat-wrapper">
-            <div class="chat-header">
-                <div class="status-dot"></div>
-                <span>TalkBot is online!</span>
-            </div>
-            
-            <div class="chat-display" id="chatDisplay">
+        <main class="content-area">
+            <section id="home" class="page-section">
+                <div class="welcome-card">
+                    <h1>Welcome to my AI Space ✨</h1>
+                    <p>I built TalkBot to help students navigate the world of LLMs safely and effectively.</p>
+                    <div class="stats">
+                        <div class="stat-box"><b>5★</b><span>Chinese</span></div>
+                        <div class="stat-box"><b>4★</b><span>English</span></div>
+                    </div>
                 </div>
+            </section>
 
-            <div class="options-area" id="optionsArea">
+            <section id="chat" class="page-section active">
+                <div class="talkbot-card">
+                    <header class="bot-header">
+                        <span class="status">● Online</span>
+                        <h3>TalkBot v2.0</h3>
+                    </header>
+                    <div class="chat-display" id="chatDisplay"></div>
+                    <div class="options-area" id="optionsArea"></div>
                 </div>
-
-            <div class="controls">
-                <button class="btn-restart" onclick="resetChat()">🔄 Reset Conversation</button>
-            </div>
-        </div>
-    </section>
-
+            </section>
+        </main>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
