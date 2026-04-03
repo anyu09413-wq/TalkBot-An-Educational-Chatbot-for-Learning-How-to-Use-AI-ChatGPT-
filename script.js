@@ -1,75 +1,91 @@
-// 1. Conversation Data Structure (Unchanged content)
+// 1. The "Brain" of TalkBot - Content & Game Logic
 const chatData = {
     "main_menu": {
-        message: "Hello! I am TalkBot. I can help you learn how to use ChatGPT better. Please choose a topic below to begin.",
+        message: "Hello! I'm TalkBot, your pink AI tutor. 🌸 What would you like to explore today?",
         options: [
-            { text: "What is ChatGPT?", next: "what_is_ai" },
-            { text: "How to ask better prompts?", next: "better_prompts" },
-            { text: "Using AI for study", next: "ai_study" },
-            { text: "Responsible AI use", next: "responsible_use" }
+            { text: "🕵️ The Story of ChatGPT", next: "history" },
+            { text: "💡 How to write better prompts", next: "better_prompts" },
+            { text: "🎮 Play: Prompt Challenge", next: "game_start" },
+            { text: "🛡️ Stay safe with AI", next: "responsible_use" }
         ]
     },
-    "what_is_ai": {
-        message: "ChatGPT is an AI tool that can understand and generate human-like text. It's like having a very well-read assistant!",
+
+    // --- SECTION: ChatGPT History & Facts ---
+    "history": {
+        message: "🤖 ChatGPT was created by **OpenAI** (led by Sam Altman). It's a 'Large Language Model' that was trained on almost all the text on the internet! It launched in Nov 2022.",
         options: [
-            { text: "How does it work?", next: "how_it_works" },
-            { text: "What can it help me do?", next: "what_can_it_do" },
-            { text: "Back to Main Menu", next: "main_menu" }
+            { text: "What does GPT mean?", next: "gpt_meaning" },
+            { text: "How was it made?", next: "how_it_made" },
+            { text: "Back to Menu", next: "main_menu" }
         ]
     },
-    "how_it_works": {
-        message: "It works by predicting the next word in a sentence based on patterns it learned from millions of books and websites.",
-        options: [{ text: "Back to Main Menu", next: "main_menu" }]
+    "gpt_meaning": {
+        message: "GPT stands for **Generative Pre-trained Transformer**. Basically, it means it's a super-smart 'prediction machine' that guesses the next word in a sentence! 🧠",
+        options: [{ text: "Cool! What else?", next: "history" }]
     },
+    "how_it_made": {
+        message: "It used a technique called **RLHF** (Reinforcement Learning from Human Feedback). Real humans 'graded' the AI's answers to teach it how to be helpful and polite! ✨",
+        options: [{ text: "Got it!", next: "history" }]
+    },
+
+    // --- SECTION: Prompting Skills ---
     "better_prompts": {
-        message: "To get better answers, be clear and specific. Instead of 'Tell me about science', try 'Explain photosynthesis for a 10th grade student'.",
+        message: "To get the best out of AI, follow the **S.P.E.C.** rule: \n✅ **S**pecific \n✅ **P**urpose \n✅ **E**xamples \n✅ **C**onstraints",
         options: [
-            { text: "Show me a good example", next: "good_example" },
-            { text: "Show me a bad example", next: "bad_example" },
-            { text: "Back to Main Menu", next: "main_menu" }
+            { text: "Show me a GOOD prompt", next: "good_prompt" },
+            { text: "Show me a BAD prompt", next: "bad_prompt" },
+            { text: "Back to Menu", next: "main_menu" }
         ]
     },
-    "good_example": {
-        message: "Good: 'Write a 3-paragraph summary of the French Revolution focusing on its causes for a history project.'",
+    "good_prompt": {
+        message: "🌟 **GOOD:** 'Act as a travel guide. Create a 3-day budget itinerary for Tokyo focusing on cute cafes and anime shops.'",
         options: [{ text: "Why is this good?", next: "why_good" }, { text: "Back", next: "better_prompts" }]
     },
     "why_good": {
-        message: "It includes a Role (History project), a Task (Summary), and Constraints (3 paragraphs, focus on causes).",
-        options: [{ text: "Back to Main Menu", next: "main_menu" }]
+        message: "It gives the AI a **Role** (Travel Guide), a **Target** (Tokyo), and **Constraints** (3 days, Budget, Specific themes). 🏆",
+        options: [{ text: "I see!", next: "main_menu" }]
     },
-    "ai_study": {
-        message: "AI can explain complex topics, summarize long articles, or help you brainstorm ideas for essays.",
-        options: [{ text: "Back to Main Menu", next: "main_menu" }]
+    "bad_prompt": {
+        message: "❌ **BAD:** 'Tell me what to do in Japan.' \n(This is too vague! The AI doesn't know your budget, interests, or how long you're staying.)",
+        options: [{ text: "Try to fix it", next: "better_prompts" }]
     },
-    "responsible_use": {
-        message: "AI can sometimes make mistakes (hallucinate). You should always double-check facts and never share private information.",
+
+    // --- SECTION: Mini-Game ---
+    "game_start": {
+        message: "🎮 **PROMPT CHALLENGE!** \n\nScenario: You want AI to help you study for a Math test. Which choice is better?",
         options: [
-            { text: "Why check answers?", next: "check_answers" },
-            { text: "Back to Main Menu", next: "main_menu" }
+            { text: "A: 'Help me with Math.'", next: "game_wrong" },
+            { text: "B: 'Explain Pythagoras' Theorem to me using a Pizza analogy.'", next: "game_right" }
         ]
     },
-    "check_answers": {
-        message: "AI doesn't 'know' facts; it knows patterns. Always use a textbook or a trusted website to verify information.",
-        options: [{ text: "Back to Main Menu", next: "main_menu" }]
+    "game_wrong": {
+        message: "Oh no! 🙀 Prompt A is too simple. The AI won't know where to start. Try again!",
+        options: [{ text: "🔄 Try Again", next: "game_start" }]
+    },
+    "game_right": {
+        message: "🎉 **YOU WIN!** By asking for a 'Pizza analogy,' you made the explanation much easier to understand. You're an AI Master! 🏅",
+        options: [
+            { text: "Play Again", next: "game_start" },
+            { text: "Finish Game", next: "main_menu" }
+        ]
+    },
+
+    // --- SECTION: Responsibility ---
+    "responsible_use": {
+        message: "Remember: AI is smart but not perfect. It can 'hallucinate' (make up facts). Always check your homework against a textbook! 📚🛡️",
+        options: [{ text: "I'll be careful!", next: "main_menu" }]
     }
 };
 
-// 2. Navigation & Rendering Logic
+// 2. Core Logic Functions
 function showSection(id) {
-    const sections = document.querySelectorAll('section');
-    sections.forEach(s => s.classList.remove('active'));
-    
-    const target = document.getElementById(id);
-    if (target) {
-        target.classList.add('active');
-    }
+    document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
 }
 
 function startLearning() {
     showSection('chat');
-    // Clear chat and restart logic
-    const display = document.getElementById('chatDisplay');
-    if (display) display.innerHTML = "";
+    document.getElementById('chatDisplay').innerHTML = "";
     renderStep("main_menu");
 }
 
@@ -78,39 +94,32 @@ function renderStep(stepId) {
     const display = document.getElementById('chatDisplay');
     const optionsArea = document.getElementById('optionsArea');
 
-    if (!step || !display || !optionsArea) return;
-
-    // Add Bot Message
+    // Bot Message with "Cute" Emojis
+    const emojis = ["💖", "✨", "🌸", "🍭", "🎀", "🦄"];
+    const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+    
     const botMsg = document.createElement('div');
     botMsg.className = "msg bot";
-    botMsg.textContent = step.message;
+    botMsg.innerHTML = `<strong>TalkBot:</strong> ${randomEmoji} ${step.message}`;
     display.appendChild(botMsg);
 
-    // Clear previous options
+    // Clear and build new choice buttons
     optionsArea.innerHTML = "";
-
-    // Add New Options
     step.options.forEach(opt => {
         const btn = document.createElement('button');
         btn.className = "choice-btn";
         btn.textContent = opt.text;
         
-        // Using a direct event listener to ensure responsiveness
-        btn.addEventListener('click', function() {
+        btn.onclick = () => {
             addUserMessage(opt.text);
-            // Disable buttons temporarily to prevent double-clicking
-            optionsArea.innerHTML = ""; 
-            setTimeout(() => renderStep(opt.next), 300);
-        });
-        
+            optionsArea.innerHTML = ""; // Prevent double clicks
+            setTimeout(() => renderStep(opt.next), 400); // Small delay for "thinking" feel
+        };
         optionsArea.appendChild(btn);
     });
 
-    // Smooth Auto-scroll
-    display.scrollTo({
-        top: display.scrollHeight,
-        behavior: 'smooth'
-    });
+    // Auto-scroll to bottom
+    display.scrollTo({ top: display.scrollHeight, behavior: 'smooth' });
 }
 
 function addUserMessage(text) {
@@ -119,22 +128,10 @@ function addUserMessage(text) {
     userMsg.className = "msg user";
     userMsg.textContent = text;
     display.appendChild(userMsg);
-    
-    display.scrollTo({
-        top: display.scrollHeight,
-        behavior: 'smooth'
-    });
+    display.scrollTo({ top: display.scrollHeight, behavior: 'smooth' });
 }
 
 function resetChat() {
-    const display = document.getElementById('chatDisplay');
-    if (display) {
-        display.innerHTML = "";
-        renderStep("main_menu");
-    }
+    document.getElementById('chatDisplay').innerHTML = "";
+    renderStep("main_menu");
 }
-
-// Initial safety check when the page loads
-window.addEventListener('DOMContentLoaded', () => {
-    console.log("TalkBot System Ready");
-});
