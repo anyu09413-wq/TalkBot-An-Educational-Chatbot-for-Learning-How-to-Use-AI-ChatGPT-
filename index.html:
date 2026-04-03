@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TalkBot | Guided AI Learning</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <div class="logo">TalkBot<span>.edu</span></div>
+        <ul>
+            <li><a href=" " onclick="showSection('home')">Home</a ></li>
+            <li><a href="#" onclick="showSection('chat')">Learning Bot</a ></li>
+        </ul>
+    </nav>
+
+    <section id="home" class="active">
+        <div class="hero">
+            <h1>Learn to Master ChatGPT</h1>
+            <p>Welcome to TalkBot. Instead of typing, follow our guided paths to discover how to write better prompts, study effectively, and use AI safely.</p >
+            <button class="btn-main" onclick="startLearning()">Start Learning Path</button>
+        </div>
+    </section>
+
+    <section id="chat">
+        <div class="chat-wrapper">
+            <div class="chat-display" id="chatDisplay">
+                </div>
+            <div class="options-area" id="optionsArea">
+                </div>
+            <div class="controls">
+                <button class="btn-restart" onclick="resetChat()">Restart from Menu</button>
+            </div>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>
