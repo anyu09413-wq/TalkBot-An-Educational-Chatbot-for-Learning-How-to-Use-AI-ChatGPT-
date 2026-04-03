@@ -1,100 +1,121 @@
 /**
- * TalkBot Engine v3.0 - Professional Dashboard Edition
- * 功能：状态机对话、成就解锁、自由输入匹配、小游戏逻辑
+ * TalkBot Engine v4.0 - Full Featured Dashboard
+ * Includes 10-Question Quiz & Custom Q&A Logic
  */
 
-// 1. 核心对话数据库 (Guided Conversation Data)
+// 1. Hard-coded Q&A for Free Typing (Audience interaction)
+const customQA = [
+    { q: ["hi", "hello", "hey"], a: "Hello! How can I help you today?" },
+    { q: ["name", "who are you"], a: "I’m an AI assistant. You can call me ChatGPT." },
+    { q: ["how are you", "how's it going"], a: "I’m doing well, thank you! How can I assist you?" },
+    { q: ["what can you do", "help me"], a: "I can answer questions, explain topics, help with homework, write text, and more." },
+    { q: ["what is ai", "define ai"], a: "AI (Artificial Intelligence) is technology that allows machines to learn, think, and solve problems like humans." },
+    { q: ["photosynthesis"], a: "Photosynthesis is the process by which plants use sunlight, water, and carbon dioxide to produce food (glucose) and oxygen." }
+];
+
+// 2. 10-Question Speed Quiz Data
+const quizData = [
+    { q: "Is AI always 100% accurate?", a: false },
+    { q: "Does ChatGPT 'think' like a human?", a: false },
+    { q: "Can AI help you brainstorm ideas?", a: true },
+    { q: "Should you share passwords with AI?", a: false },
+    { q: "Is 'Hallucination' when AI lies?", a: true },
+    { q: "Does AI have real feelings?", a: false },
+    { q: "Can AI summarize long books?", a: true },
+    { q: "Should you check AI facts with a book?", a: true },
+    { q: "Is AI better than a teacher?", a: false },
+    { q: "Can AI write creative stories?", a: true }
+];
+
+let currentQuizIdx = 0;
+let masteredCount = 0;
+
+// 3. Dialogue Data (Choice-based)
 const chatData = {
     "start": {
-        message: "Hello student! 🎓 I'm TalkBot. I'll help you master AI prompts through a guided journey. Where shall we begin?",
+        message: "Welcome to the Learning Hub! 🎓 I'm TalkBot. Use the buttons below or type your own question in the box!",
         options: [
-            { text: "📝 Prompting 101", next: "prompting" },
-            { text: "🏫 Homework Helper", next: "homework" },
+            { text: "📝 Prompt Rules", next: "rules" },
             { text: "🛡️ Safety Tips", next: "safety" }
         ],
-        unlock: "card-2" // 初始解锁知识卡片2
+        unlock: "card-2"
     },
-    "prompting": {
-        message: "A good prompt needs a **Role** and a **Task**. Instead of saying 'Tell me about Science', try giving the AI a specific context!",
-        options: [
-            { text: "Show Example", next: "p_ex" },
-            { text: "Main Menu", next: "start" }
-        ]
-    },
-    "p_ex": {
-        message: "🌟 **Example:** 'Act as a physics teacher. Explain gravity using a sports analogy for a middle school student.'",
-        options: [{ text: "I'll try that!", next: "start" }],
-        mastered: true // 增加进度条
-    },
-    "homework": {
-        message: "Don't just ask for the answer. Ask: 'Explain the logic behind this math problem so I can solve the next one myself.'",
-        options: [{ text: "Good strategy!", next: "start" }],
+    "rules": {
+        message: "Remember the **S.P.E.C.** rule: Specific, Purpose, Examples, and Constraints. This makes your prompts 10x better!",
+        options: [{ text: "Got it!", next: "start" }],
         mastered: true
     },
     "safety": {
-        message: "Be careful! AI can **hallucinate**. Never trust AI for medical, legal, or ultra-important facts without checking sources.",
-        options: [{ text: "What is hallucination?", next: "h_info" }],
-        unlock: "card-1" // 解锁知识卡片1
-    },
-    "h_info": {
-        message: "It's when the AI sounds very confident but is actually making things up. It predicts words, it doesn't 'know' facts. 🕵️",
-        options: [{ text: "Understood!", next: "start" }],
-        unlock: "card-3" // 解锁知识卡片3
+        message: "Never copy AI work without checking it first. Use it to *learn*, not just to *finish*.",
+        options: [{ text: "I agree", next: "start" }],
+        mastered: true
     }
 };
 
-let masteredCount = 0;
+// --- CORE FUNCTIONS ---
 
-// 2. 渲染对话步骤 (Render Steps)
-function renderStep(id) {
-    const step = chatData[id];
-    const display = document.getElementById('chatDisplay');
-    const optionsArea = document.getElementById('optionsArea');
+// Handle Free Typing (Audience Interaction)
+document.getElementById('sendBtn').onclick = () => {
+    const input = document.getElementById('userInput');
+    const text = input.value.trim().toLowerCase();
+    if(!text) return;
 
-    // 清空当前选项，防止连点
-    optionsArea.innerHTML = "";
+    addUserMsg(input.value);
+    input.value = "";
 
-    // 创建机器人气泡（带打字动画感）
-    const botMsg = document.createElement('div');
-    botMsg.className = "msg bot";
-    botMsg.innerHTML = `<strong>✨ TalkBot:</strong><br><em>Typing...</em>`;
-    display.appendChild(botMsg);
-    
-    // 模拟思考延迟
     setTimeout(() => {
-        botMsg.innerHTML = `<strong>✨ TalkBot:</strong><br>${step.message}`;
+        // Search for a match in our custom Q&A list
+        let response = "That's a great question! I'm still learning that specific topic. Try asking about AI or Photosynthesis!";
         
-        // 处理知识卡片解锁
-        if(step.unlock) {
-            const card = document.getElementById(step.unlock);
-            card.classList.add('unlocked');
-            card.style.transform = "scale(1.05)";
-            setTimeout(() => card.style.transform = "scale(1)", 300);
+        for (let item of customQA) {
+            if (item.q.some(keyword => text.includes(keyword))) {
+                response = item.a;
+                break;
+            }
         }
 
-        // 更新学习进度
-        if(step.mastered) {
-            masteredCount++;
-            updateStats();
-        }
-
-        // 渲染新选项
-        step.options.forEach(opt => {
-            const btn = document.createElement('button');
-            btn.className = "choice-btn";
-            btn.innerText = opt.text;
-            btn.onclick = () => {
-                addUserMsg(opt.text);
-                renderStep(opt.next);
-            };
-            optionsArea.appendChild(btn);
-        });
-
-        scrollChat();
+        addBotMsg(response);
     }, 600);
+};
+
+// Handle Quiz Logic
+function playGame(userChoice) {
+    const fb = document.getElementById('q-feedback');
+    const questionText = document.getElementById('q-text');
+    const correct = quizData[currentQuizIdx].a;
+
+    if (userChoice === correct) {
+        fb.innerHTML = "✅ Correct!";
+        fb.style.color = "#00b894";
+    } else {
+        fb.innerHTML = "❌ Wrong!";
+        fb.style.color = "#ff8fb1";
+    }
+
+    // Move to next question after delay
+    setTimeout(() => {
+        currentQuizIdx++;
+        if (currentQuizIdx < quizData.length) {
+            questionText.innerText = quizData[currentQuizIdx].q;
+            fb.innerHTML = "";
+        } else {
+            questionText.innerText = "Quiz Finished! 🏆";
+            document.querySelectorAll('.game-btn').forEach(b => b.style.display = 'none');
+        }
+    }, 1200);
 }
 
-// 3. 用户消息与自由输入 (User Messages & Free Input)
+// Bot Message Helper
+function addBotMsg(text) {
+    const display = document.getElementById('chatDisplay');
+    const botMsg = document.createElement('div');
+    botMsg.className = "msg bot";
+    botMsg.innerHTML = `✨ <strong>TalkBot:</strong><br>${text}`;
+    display.appendChild(botMsg);
+    scrollChat();
+}
+
+// User Message Helper
 function addUserMsg(text) {
     const display = document.getElementById('chatDisplay');
     const userMsg = document.createElement('div');
@@ -104,75 +125,36 @@ function addUserMsg(text) {
     scrollChat();
 }
 
-// 处理底部输入框的打字逻辑
-document.getElementById('sendBtn').onclick = () => {
-    const input = document.getElementById('userInput');
-    const text = input.value.trim();
-    if(!text) return;
-
-    addUserMsg(text);
-    input.value = "";
-
-    // 自由问答匹配逻辑 (Keywords Matching)
-    setTimeout(() => {
-        let reply = "That's an interesting point! I recommend exploring the guided lessons below to see how I can help with that specifically.";
-        
-        const lowerText = text.toLowerCase();
-        if(lowerText.includes("hello") || lowerText.includes("hi")) {
-            reply = "Hello there! 👋 I'm ready to help you navigate the world of AI. What's on your mind?";
-        } else if(lowerText.includes("who are you")) {
-            reply = "I'm TalkBot, an educational tool designed to help students use ChatGPT more effectively and safely!";
-        } else if(lowerText.includes("wrong") || lowerText.includes("lie")) {
-            reply = "Exactly! That's why we emphasize 'Hallucination'. Check the card on your right for more details!";
-        } else if(lowerText.includes("thank")) {
-            reply = "You're very welcome! Keep practicing those prompts! 🌟";
-        }
-
-        const display = document.getElementById('chatDisplay');
-        const botMsg = document.createElement('div');
-        botMsg.className = "msg bot";
-        botMsg.innerHTML = `<strong>✨ TalkBot:</strong><br>${reply}`;
-        display.appendChild(botMsg);
-        scrollChat();
-    }, 800);
-};
-
-// 支持 Enter 键发送
-document.getElementById('userInput').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') document.getElementById('sendBtn').click();
-});
-
-// 4. 小游戏逻辑 (Mini-Game)
-function playGame(isYes) {
-    const fb = document.getElementById('q-feedback');
-    if(!isYes) {
-        fb.innerHTML = "✅ Correct! AI often makes logic errors.";
-        fb.style.color = "#00b894";
-    } else {
-        fb.innerHTML = "❌ Careful! Trusting AI blindly is risky.";
-        fb.style.color = "#ff8fb1";
-    }
-}
-
-// 5. 辅助功能 (Helpers)
-function updateStats() {
-    document.getElementById('mastered-count').innerText = masteredCount;
-    const progress = Math.min((masteredCount / 4) * 100, 100);
-    document.getElementById('progress-fill').style.width = progress + "%";
-}
-
 function scrollChat() {
     const display = document.getElementById('chatDisplay');
     display.scrollTo({ top: display.scrollHeight, behavior: 'smooth' });
 }
 
-function resetChat() {
-    document.getElementById('chatDisplay').innerHTML = "";
-    masteredCount = 0;
-    updateStats();
-    document.querySelectorAll('.wiki-card').forEach(c => c.classList.remove('unlocked'));
-    renderStep('start');
+// Choice-based render
+function renderStep(id) {
+    const step = chatData[id];
+    addBotMsg(step.message);
+    
+    const optionsArea = document.getElementById('optionsArea');
+    optionsArea.innerHTML = "";
+    
+    step.options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = "choice-btn";
+        btn.innerText = opt.text;
+        btn.onclick = () => {
+            addUserMsg(opt.text);
+            renderStep(opt.next);
+        };
+        optionsArea.appendChild(btn);
+    });
+
+    if(step.unlock) document.getElementById(step.unlock).classList.add('unlocked');
 }
 
-// 页面加载启动
+// Support Enter Key
+document.getElementById('userInput').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') document.getElementById('sendBtn').click();
+});
+
 window.onload = () => renderStep('start');
