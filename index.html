@@ -3,166 +3,358 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TalkBot | Interactive AI Tutor</title>
+    <title>TalkBot | Professional AI Learning Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #9d81ff;
             --accent: #ff8fb1;
-            --bg: #fdf2f8;
-            --glass: rgba(255, 255, 255, 0.85);
+            --bg: #f8f9ff;
+            --glass: rgba(255, 255, 255, 0.8);
+            --text: #2d3436;
+            --sidebar-width: 280px;
         }
+
+        * { box-sizing: border-box; transition: all 0.3s ease; }
 
         body {
-            margin: 0; font-family: 'Plus Jakarta Sans', sans-serif;
-            background: radial-gradient(circle at top left, #fdf2f8, #f5f3ff);
-            height: 100vh; display: flex; justify-content: center; align-items: center;
+            margin: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(135deg, #fdf2f8 0%, #f5f3ff 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            color: var(--text);
         }
 
-        /* The Main Profile-Style Card */
-        .app-card {
-            width: 90%; max-width: 420px; height: 85vh;
-            background: var(--glass); backdrop-filter: blur(20px);
-            border-radius: 35px; border: 1px solid rgba(255,255,255,0.5);
-            box-shadow: 0 20px 50px rgba(157, 129, 255, 0.15);
-            display: flex; flex-direction: column; overflow: hidden;
+        /* 背景装饰层 */
+        .bg-blob {
+            position: absolute; width: 500px; height: 500px;
+            background: var(--primary); filter: blur(150px);
+            opacity: 0.1; z-index: -1; top: -100px; left: -100px;
         }
 
-        .header {
-            padding: 25px; border-bottom: 1px solid rgba(0,0,0,0.05);
-            display: flex; align-items: center; gap: 15px;
+        /* 全屏容器 */
+        .dashboard {
+            width: 95vw;
+            height: 90vh;
+            display: flex;
+            gap: 20px;
+            padding: 10px;
         }
 
-        .avatar {
-            width: 50px; height: 50px; background: linear-gradient(135deg, var(--primary), var(--accent));
-            border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem;
+        /* --- 左侧边栏：小游戏 & 进度 --- */
+        .left-panel {
+            width: var(--sidebar-width);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
 
-        .status { font-size: 0.7rem; color: #00b894; font-weight: 800; text-transform: uppercase; }
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.5);
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(157, 129, 255, 0.1);
+        }
 
-        #chat-display {
-            flex: 1; padding: 20px; overflow-y: auto;
-            display: flex; flex-direction: column; gap: 12px;
+        .game-title { font-size: 1rem; font-weight: 800; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        .game-box { background: white; padding: 15px; border-radius: 15px; text-align: center; border: 1px solid #eee; }
+        .game-btn { 
+            width: 100%; margin-top: 8px; padding: 10px; border-radius: 10px; border: none; 
+            background: #f1eeff; color: var(--primary); font-weight: 700; cursor: pointer;
+        }
+        .game-btn:hover { background: var(--primary); color: white; transform: scale(1.05); }
+
+        /* --- 中间：聊天主场 --- */
+        .main-chat {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border-radius: 32px;
+            border: 1px solid rgba(255,255,255,0.6);
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.05);
+        }
+
+        .chat-header {
+            padding: 20px 30px;
+            background: rgba(255,255,255,0.4);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .chat-portal {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
             scroll-behavior: smooth;
         }
 
-        /* Chat Bubbles */
-        .msg { padding: 14px 18px; border-radius: 22px; font-size: 0.95rem; line-height: 1.5; animation: pop 0.3s ease; }
-        .bot { background: white; align-self: flex-start; border-bottom-left-radius: 4px; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
+        /* 消息气泡 */
+        .msg { max-width: 80%; padding: 15px 20px; border-radius: 20px; font-size: 0.95rem; line-height: 1.6; }
+        .bot { background: white; align-self: flex-start; border-bottom-left-radius: 4px; box-shadow: 0 5px 15px rgba(0,0,0,0.02); }
         .user { background: var(--primary); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
 
-        /* The Clickable Area */
-        .controls { padding: 20px; background: white; border-top: 1px solid #f0f0f0; }
-        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
-        .btn-choice {
-            background: #f8f9fa; border: 2px solid transparent;
-            padding: 12px; border-radius: 14px; font-weight: 600;
-            font-family: inherit; cursor: pointer; transition: 0.2s; text-align: center;
+        /* 引导式按钮区 */
+        .options-area {
+            padding: 15px 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            border-top: 1px solid rgba(0,0,0,0.05);
         }
 
-        .btn-choice:hover { border-color: var(--primary); color: var(--primary); background: #f1eeff; }
+        .choice-btn {
+            background: white; border: 2px solid var(--primary); color: var(--primary);
+            padding: 10px 18px; border-radius: 12px; font-weight: 600; cursor: pointer;
+        }
+        .choice-btn:hover { background: var(--primary); color: white; }
 
-        @keyframes pop { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        /* 打字输入区 */
+        .input-bar {
+            padding: 20px 30px;
+            background: white;
+            display: flex;
+            gap: 12px;
+        }
+
+        #userInput {
+            flex: 1; border: 2px solid #f0f0f0; padding: 14px; border-radius: 15px; outline: none;
+            font-family: inherit; font-size: 0.9rem;
+        }
+        #userInput:focus { border-color: var(--primary); }
+
+        .send-btn {
+            background: var(--primary); color: white; border: none; padding: 0 25px; border-radius: 15px;
+            font-weight: 700; cursor: pointer;
+        }
+
+        /* --- 右侧：知识卡片 --- */
+        .right-panel {
+            width: var(--sidebar-width);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .wiki-card { opacity: 0.5; filter: grayscale(1); }
+        .wiki-card.unlocked { opacity: 1; filter: grayscale(0); border: 2px solid var(--accent); }
+
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .msg { animation: fadeInUp 0.4s ease forwards; }
+
     </style>
 </head>
 <body>
 
-<div class="app-card">
-    <div class="header">
-        <div class="avatar">🤖</div>
-        <div>
-            <div class="status">● Online</div>
-            <strong style="display:block; font-size: 1.1rem;">TalkBot v2.0</strong>
-        </div>
+    <div class="bg-blob"></div>
+
+    <div class="dashboard">
+        
+        <aside class="left-panel">
+            <div class="glass-card">
+                <div class="game-title">🎮 Speed Quiz</div>
+                <div class="game-box">
+                    <p id="q-text" style="font-size: 0.85rem; height: 40px;">Can AI write code perfectly?</p>
+                    <button class="game-btn" onclick="playGame(false)">❌ Definitely No</button>
+                    <button class="game-btn" onclick="playGame(true)">✅ Yes, Always</button>
+                    <p id="q-feedback" style="font-size: 0.75rem; margin-top: 10px; font-weight: 600;"></p>
+                </div>
+            </div>
+
+            <div class="glass-card">
+                <div class="game-title">📊 Session Stats</div>
+                <p style="font-size: 0.8rem; margin: 5px 0;">Prompts Mastered: <span id="mastered-count" style="color: var(--primary); font-weight: 800;">0</span></p>
+                <div style="height: 8px; background: #eee; border-radius: 10px; overflow: hidden;">
+                    <div id="progress-fill" style="width: 10%; height: 100%; background: var(--accent);"></div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-chat">
+            <header class="chat-header">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 12px; height: 12px; background: #00b894; border-radius: 50%; box-shadow: 0 0 10px #00b894;"></div>
+                    <strong style="font-size: 1.1rem;">TalkBot Learning Console</strong>
+                </div>
+                <button onclick="resetChat()" style="background: none; border: none; color: #999; cursor: pointer; text-decoration: underline; font-size: 0.8rem;">Reset Journey</button>
+            </header>
+
+            <div class="chat-portal" id="chatDisplay">
+                </div>
+
+            <div class="options-area" id="optionsArea">
+                </div>
+
+            <div class="input-bar">
+                <input type="text" id="userInput" placeholder="Ask TalkBot a custom question...">
+                <button class="send-btn" id="sendBtn">Send</button>
+            </div>
+        </main>
+
+        <aside class="right-panel">
+            <div class="glass-card wiki-card" id="card-1">
+                <div class="game-title">📖 Hallucination</div>
+                <p style="font-size: 0.8rem;">When an AI model generates incorrect or nonsensical info as if it were a fact.</p>
+            </div>
+            <div class="glass-card wiki-card" id="card-2">
+                <div class="game-title">✍️ S.P.E.C. Rule</div>
+                <p style="font-size: 0.8rem;">Specific, Purpose, Example, Constraints. The secret to perfect prompts.</p>
+            </div>
+            <div class="glass-card wiki-card" id="card-3">
+                <div class="game-title">🛡️ Academic Integrity</div>
+                <p style="font-size: 0.8rem;">Using AI to understand, not to cheat. Always verify your sources!</p>
+            </div>
+        </aside>
+
     </div>
 
-    <div id="chat-display"></div>
+    <script>
+        const chatData = {
+            "start": {
+                message: "Hello student! 🎓 I'm TalkBot. I'll help you master AI prompts. Where shall we begin?",
+                options: [
+                    { text: "📝 Prompting 101", next: "prompting" },
+                    { text: "🏫 Homework Helper", next: "homework" },
+                    { text: "🛡️ Safety Tips", next: "safety" }
+                ],
+                unlock: "card-2"
+            },
+            "prompting": {
+                message: "A good prompt needs a **Role** and a **Task**. Instead of 'Tell me about gravity', try something more specific!",
+                options: [
+                    { text: "Show Example", next: "p_ex" },
+                    { text: "Main Menu", next: "start" }
+                ]
+            },
+            "p_ex": {
+                message: "Example: 'Act as a physics teacher. Explain gravity using a sports analogy for a middle school student.'",
+                options: [{ text: "Got it!", next: "start" }],
+                mastered: true
+            },
+            "homework": {
+                message: "Don't just ask for the answer. Ask: 'Explain the logic behind this math problem so I can solve the next one.'",
+                options: [{ text: "Good Idea", next: "start" }],
+                mastered: true
+            },
+            "safety": {
+                message: "Be careful! AI can **hallucinate**. Never trust AI for medical, legal, or ultra-important facts without checking.",
+                options: [{ text: "What is hallucination?", next: "h_info" }],
+                unlock: "card-1"
+            },
+            "h_info": {
+                message: "It's when the AI sounds very confident but is actually making things up. Always verify! 🕵️",
+                options: [{ text: "Back to Menu", next: "start" }],
+                unlock: "card-3"
+            }
+        };
 
-    <div class="controls">
-        <div class="options-grid" id="options-area"></div>
-    </div>
-</div>
+        let masteredCount = 0;
 
-<script>
-    const chatData = {
-        "start": {
-            message: "Welcome! I'm TalkBot. 🎓 Ready to master AI prompting through a guided journey?",
-            options: [
-                { text: "📝 Prompt Basics", next: "prompts" },
-                { text: "🏫 Homework Help", next: "homework" },
-                { text: "🛡️ Safety Tips", next: "safety" },
-                { text: "🌍 History of AI", next: "history" }
-            ]
-        },
-        "prompts": {
-            message: "To get better answers, be **Specific**. Instead of 'Tell me about Science', ask for a role and a topic!",
-            options: [
-                { text: "Show Example", next: "prompt_ex" },
-                { text: "Back to Menu", next: "start" }
-            ]
-        },
-        "prompt_ex": {
-            message: "Try: 'Act as a historian. Summarize the Industrial Revolution in 3 bullet points for a student.'",
-            options: [{ text: "Got it!", next: "start" }]
-        },
-        "homework": {
-            message: "When using AI for study, ask for **explanations**, not just answers. This helps you actually learn!",
-            options: [
-                { text: "Better Prompts", next: "prompts" },
-                { text: "Back to Menu", next: "start" }
-            ]
-        },
-        "safety": {
-            message: "AI can 'hallucinate' (make up facts). Always verify important data with a textbook! 🛡️",
-            options: [{ text: "I'll be safe!", next: "start" }]
-        },
-        "history": {
-            message: "ChatGPT was created by OpenAI. It uses a 'Transformer' architecture to predict the next word in a sentence.",
-            options: [{ text: "Interesting!", next: "start" }]
+        function renderStep(id) {
+            const step = chatData[id];
+            const display = document.getElementById('chatDisplay');
+            const optionsArea = document.getElementById('optionsArea');
+
+            // Bot Response
+            const botMsg = document.createElement('div');
+            botMsg.className = "msg bot";
+            botMsg.innerHTML = `✨ <strong>TalkBot:</strong><br>${step.message}`;
+            display.appendChild(botMsg);
+
+            // Handle Unlocks & Stats
+            if(step.unlock) document.getElementById(step.unlock).classList.add('unlocked');
+            if(step.mastered) {
+                masteredCount++;
+                document.getElementById('mastered-count').innerText = masteredCount;
+                document.getElementById('progress-fill').style.width = (masteredCount * 33) + "%";
+            }
+
+            // Options
+            optionsArea.innerHTML = "";
+            step.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "choice-btn";
+                btn.innerText = opt.text;
+                btn.onclick = () => {
+                    addUserMsg(opt.text);
+                    setTimeout(() => renderStep(opt.next), 500);
+                };
+                optionsArea.appendChild(btn);
+            });
+
+            display.scrollTop = display.scrollHeight;
         }
-    };
 
-    function renderStep(id) {
-        const step = chatData[id];
-        const display = document.getElementById('chat-display');
-        const optionsArea = document.getElementById('options-area');
+        function addUserMsg(text) {
+            const display = document.getElementById('chatDisplay');
+            const userMsg = document.createElement('div');
+            userMsg.className = "msg user";
+            userMsg.innerText = text;
+            display.appendChild(userMsg);
+            display.scrollTop = display.scrollHeight;
+        }
 
-        // Add Bot Message
-        const botMsg = document.createElement('div');
-        botMsg.className = "msg bot";
-        botMsg.innerHTML = step.message;
-        display.appendChild(botMsg);
+        // --- 打字输入逻辑 (观众互动) ---
+        document.getElementById('sendBtn').onclick = () => {
+            const input = document.getElementById('userInput');
+            const text = input.value.trim();
+            if(!text) return;
 
-        // Clear and Add Buttons
-        optionsArea.innerHTML = "";
-        step.options.forEach(opt => {
-            const btn = document.createElement('button');
-            btn.className = "btn-choice";
-            btn.innerText = opt.text;
-            btn.onclick = () => {
-                addUserMsg(opt.text);
-                // Delay slightly for realism
-                setTimeout(() => renderStep(opt.next), 400);
-            };
-            optionsArea.appendChild(btn);
-        });
+            addUserMsg(text);
+            input.value = "";
 
-        display.scrollTop = display.scrollHeight;
-    }
+            setTimeout(() => {
+                const display = document.getElementById('chatDisplay');
+                const botMsg = document.createElement('div');
+                botMsg.className = "msg bot";
+                
+                // 简单的互动回复逻辑
+                let reply = "I'm focusing on our guided lesson right now, but that's a clever question! Try selecting an option below to learn more.";
+                if(text.toLowerCase().includes("hello")) reply = "Hello! 👋 I'm ready to teach you. Pick a topic below!";
+                if(text.toLowerCase().includes("game")) reply = "You can play the quiz on the left panel! 🕹️";
+                if(text.toLowerCase().includes("wrong") || text.toLowerCase().includes("lie")) reply = "Exactly! That's why we call it Hallucination. Check the knowledge card on the right!";
 
-    function addUserMsg(text) {
-        const display = document.getElementById('chat-display');
-        const userMsg = document.createElement('div');
-        userMsg.className = "msg user";
-        userMsg.innerText = text;
-        display.appendChild(userMsg);
-        display.scrollTop = display.scrollHeight;
-    }
+                botMsg.innerHTML = `✨ <strong>TalkBot:</strong><br>${reply}`;
+                display.appendChild(botMsg);
+                display.scrollTop = display.scrollHeight;
+            }, 700);
+        };
 
-    // Initialize the bot
-    window.onload = () => renderStep('start');
-</script>
+        // --- 侧边栏小游戏 ---
+        function playGame(isYes) {
+            const fb = document.getElementById('q-feedback');
+            if(!isYes) {
+                fb.innerHTML = "✅ Correct! AI makes mistakes often.";
+                fb.style.color = "#00b894";
+            } else {
+                fb.innerHTML = "❌ Careful! AI often 'hallucinates'.";
+                fb.style.color = "#ff8fb1";
+            }
+        }
 
+        function resetChat() {
+            document.getElementById('chatDisplay').innerHTML = "";
+            masteredCount = 0;
+            document.getElementById('mastered-count').innerText = "0";
+            document.getElementById('progress-fill').style.width = "10%";
+            document.querySelectorAll('.wiki-card').forEach(c => c.classList.remove('unlocked'));
+            renderStep('start');
+        }
+
+        window.onload = () => renderStep('start');
+    </script>
 </body>
 </html>
