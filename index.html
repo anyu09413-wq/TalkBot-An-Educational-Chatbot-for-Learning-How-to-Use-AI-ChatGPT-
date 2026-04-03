@@ -3,36 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TalkBot | AI Learning Hub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <title>TalkBot | Interactive AI Tutor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #9d81ff;
+            --accent: #ff8fb1;
+            --bg: #fdf2f8;
+            --glass: rgba(255, 255, 255, 0.85);
+        }
+
+        body {
+            margin: 0; font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(circle at top left, #fdf2f8, #f5f3ff);
+            height: 100vh; display: flex; justify-content: center; align-items: center;
+        }
+
+        /* The Main Profile-Style Card */
+        .app-card {
+            width: 90%; max-width: 420px; height: 85vh;
+            background: var(--glass); backdrop-filter: blur(20px);
+            border-radius: 35px; border: 1px solid rgba(255,255,255,0.5);
+            box-shadow: 0 20px 50px rgba(157, 129, 255, 0.15);
+            display: flex; flex-direction: column; overflow: hidden;
+        }
+
+        .header {
+            padding: 25px; border-bottom: 1px solid rgba(0,0,0,0.05);
+            display: flex; align-items: center; gap: 15px;
+        }
+
+        .avatar {
+            width: 50px; height: 50px; background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem;
+        }
+
+        .status { font-size: 0.7rem; color: #00b894; font-weight: 800; text-transform: uppercase; }
+
+        #chat-display {
+            flex: 1; padding: 20px; overflow-y: auto;
+            display: flex; flex-direction: column; gap: 12px;
+            scroll-behavior: smooth;
+        }
+
+        /* Chat Bubbles */
+        .msg { padding: 14px 18px; border-radius: 22px; font-size: 0.95rem; line-height: 1.5; animation: pop 0.3s ease; }
+        .bot { background: white; align-self: flex-start; border-bottom-left-radius: 4px; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
+        .user { background: var(--primary); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+
+        /* The Clickable Area */
+        .controls { padding: 20px; background: white; border-top: 1px solid #f0f0f0; }
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+        .btn-choice {
+            background: #f8f9fa; border: 2px solid transparent;
+            padding: 12px; border-radius: 14px; font-weight: 600;
+            font-family: inherit; cursor: pointer; transition: 0.2s; text-align: center;
+        }
+
+        .btn-choice:hover { border-color: var(--primary); color: var(--primary); background: #f1eeff; }
+
+        @keyframes pop { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+    </style>
 </head>
 <body>
-    <div class="background-blur"></div>
-    
-    <div class="profile-container">
-        <header class="profile-header">
-            <div class="bot-identity">
-                <div class="avatar-glow">🤖</div>
-                <div class="id-text">
-                    <h1>TalkBot <span>v2.0</span></h1>
-                    <p>Your Guided AI Mentor</p>
-                </div>
-            </div>
-            <div class="status-badge">Online</div>
-        </header>
 
-        <main class="chat-portal" id="chatDisplay">
-            </main>
-
-        <footer class="action-center">
-            <p class="instruction">Select a learning path:</p>
-            <div class="options-grid" id="optionsArea">
-                </div>
-            <button class="restart-link" onclick="resetChat()">Restart Journey</button>
-        </footer>
+<div class="app-card">
+    <div class="header">
+        <div class="avatar">🤖</div>
+        <div>
+            <div class="status">● Online</div>
+            <strong style="display:block; font-size: 1.1rem;">TalkBot v2.0</strong>
+        </div>
     </div>
 
-    <script src="script.js"></script>
+    <div id="chat-display"></div>
+
+    <div class="controls">
+        <div class="options-grid" id="options-area"></div>
+    </div>
+</div>
+
+<script>
+    const chatData = {
+        "start": {
+            message: "Welcome! I'm TalkBot. 🎓 Ready to master AI prompting through a guided journey?",
+            options: [
+                { text: "📝 Prompt Basics", next: "prompts" },
+                { text: "🏫 Homework Help", next: "homework" },
+                { text: "🛡️ Safety Tips", next: "safety" },
+                { text: "🌍 History of AI", next: "history" }
+            ]
+        },
+        "prompts": {
+            message: "To get better answers, be **Specific**. Instead of 'Tell me about Science', ask for a role and a topic!",
+            options: [
+                { text: "Show Example", next: "prompt_ex" },
+                { text: "Back to Menu", next: "start" }
+            ]
+        },
+        "prompt_ex": {
+            message: "Try: 'Act as a historian. Summarize the Industrial Revolution in 3 bullet points for a student.'",
+            options: [{ text: "Got it!", next: "start" }]
+        },
+        "homework": {
+            message: "When using AI for study, ask for **explanations**, not just answers. This helps you actually learn!",
+            options: [
+                { text: "Better Prompts", next: "prompts" },
+                { text: "Back to Menu", next: "start" }
+            ]
+        },
+        "safety": {
+            message: "AI can 'hallucinate' (make up facts). Always verify important data with a textbook! 🛡️",
+            options: [{ text: "I'll be safe!", next: "start" }]
+        },
+        "history": {
+            message: "ChatGPT was created by OpenAI. It uses a 'Transformer' architecture to predict the next word in a sentence.",
+            options: [{ text: "Interesting!", next: "start" }]
+        }
+    };
+
+    function renderStep(id) {
+        const step = chatData[id];
+        const display = document.getElementById('chat-display');
+        const optionsArea = document.getElementById('options-area');
+
+        // Add Bot Message
+        const botMsg = document.createElement('div');
+        botMsg.className = "msg bot";
+        botMsg.innerHTML = step.message;
+        display.appendChild(botMsg);
+
+        // Clear and Add Buttons
+        optionsArea.innerHTML = "";
+        step.options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = "btn-choice";
+            btn.innerText = opt.text;
+            btn.onclick = () => {
+                addUserMsg(opt.text);
+                // Delay slightly for realism
+                setTimeout(() => renderStep(opt.next), 400);
+            };
+            optionsArea.appendChild(btn);
+        });
+
+        display.scrollTop = display.scrollHeight;
+    }
+
+    function addUserMsg(text) {
+        const display = document.getElementById('chat-display');
+        const userMsg = document.createElement('div');
+        userMsg.className = "msg user";
+        userMsg.innerText = text;
+        display.appendChild(userMsg);
+        display.scrollTop = display.scrollHeight;
+    }
+
+    // Initialize the bot
+    window.onload = () => renderStep('start');
+</script>
+
 </body>
 </html>
