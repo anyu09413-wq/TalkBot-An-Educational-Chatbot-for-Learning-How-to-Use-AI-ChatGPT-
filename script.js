@@ -117,3 +117,132 @@ window.onload = () => {
     addBotMsg("Hi! 🎓 I'm TalkBot. Ask me about AI or try the quiz on the left!");
     document.getElementById('q-text').innerText = quizData[0].q;
 };
+// 1. Precise Q&A Database (Ensures no "interesting question" generic replies)
+const customQA = [
+    { 
+        q: ["what is ai", "define ai"], 
+        a: "Artificial Intelligence (AI) refers to computer systems designed to perform tasks that normally require human intelligence, such as visual perception, speech recognition, and decision-making." 
+    },
+    { 
+        q: ["how does ai learn", "training"], 
+        a: "AI learns through **Machine Learning**. It processes massive amounts of data to find patterns. For example, by looking at millions of cat photos, it learns to identify a cat without being told its specific features." 
+    },
+    { 
+        q: ["prompt rules", "spec", "how to ask"], 
+        a: "The best way to talk to AI is the **S.P.E.C. Rule**: be **S**pecific, state your **P**urpose, provide an **E**xample, and set **C**onstraints!" 
+    },
+    { 
+        q: ["is ai always right", "correct", "accurate"], 
+        a: "No! AI can make mistakes called **Hallucinations**. It predicts the most likely next word, not necessarily the truth. Always double-check facts with reliable sources." 
+    },
+    { q: ["hi", "hello"], a: "Hi there! I'm ready to help you explore the world of AI!" }
+];
+
+// 2. Quiz Data
+const quizData = [
+    { q: "Is AI always 100% accurate?", a: false },
+    { q: "Does ChatGPT think exactly like a human?", a: false },
+    { q: "Can AI help you brainstorm ideas?", a: true },
+    { q: "Should you share passwords with AI?", a: false },
+    { q: "Is 'Hallucination' when AI makes up facts?", a: true },
+    { q: "Does AI have real human feelings?", a: false },
+    { q: "Can AI summarize long articles?", a: true },
+    { q: "Should you check AI facts with a source?", a: true },
+    { q: "Is AI better than a real teacher?", a: false },
+    { q: "Can AI write creative stories?", a: true }
+];
+
+let currentQuizIdx = 0;
+let userScore = 0;
+
+// --- Quiz Logic with Scoring ---
+function playGame(choice) {
+    const fb = document.getElementById('q-feedback');
+    const correct = quizData[currentQuizIdx].a;
+    
+    if (choice === correct) {
+        userScore++;
+        fb.innerHTML = "✅ Correct!";
+        fb.style.color = "#00b894";
+    } else {
+        fb.innerHTML = "❌ Wrong!";
+        fb.style.color = "#ff8fb1";
+    }
+
+    setTimeout(() => {
+        currentQuizIdx++;
+        if (currentQuizIdx < quizData.length) {
+            document.getElementById('q-text').innerText = quizData[currentQuizIdx].q;
+            fb.innerHTML = "";
+        } else {
+            // Display Final Score
+            let evaluation = userScore > 7 ? "Excellent! 🏆" : (userScore > 4 ? "Good job! 👍" : "Keep learning! 📖");
+            document.getElementById('q-text').innerHTML = `<strong>Quiz Finished!</strong><br>Score: ${userScore}/10<br>${evaluation}`;
+            document.getElementById('quiz-controls').style.display = 'none';
+            fb.innerHTML = "";
+        }
+    }, 1000);
+}
+
+// --- Suggested Questions Interaction ---
+function askSuggested(questionText) {
+    addUserMsg(questionText);
+    processReply(questionText.toLowerCase());
+}
+
+// --- Chat Logic ---
+document.getElementById('sendBtn').onclick = () => {
+    const input = document.getElementById('userInput');
+    const text = input.value.trim();
+    if(!text) return;
+    addUserMsg(text);
+    processReply(text.toLowerCase());
+    input.value = "";
+};
+
+function processReply(text) {
+    setTimeout(() => {
+        let reply = "I'm not sure about that specific topic yet. Try asking one of the suggested questions on the left!";
+        for (let item of customQA) {
+            if (item.q.some(k => text.includes(k))) {
+                reply = item.a;
+                break;
+            }
+        }
+        addBotMsg(reply);
+    }, 600);
+}
+
+// --- UI Helpers ---
+function addBotMsg(text) {
+    const d = document.getElementById('chatDisplay');
+    const m = document.createElement('div');
+    m.className = "msg bot"; m.innerHTML = `✨ <strong>TalkBot:</strong><br>${text}`;
+    d.appendChild(m); d.scrollTo({top: d.scrollHeight, behavior: 'smooth'});
+}
+
+function addUserMsg(text) {
+    const d = document.getElementById('chatDisplay');
+    const m = document.createElement('div');
+    m.className = "msg user"; m.innerText = text;
+    d.appendChild(m); d.scrollTo({top: d.scrollHeight, behavior: 'smooth'});
+}
+
+function openWiki(topic) {
+    const wikiDetails = {
+        hallucination: { title: "Hallucination", content: "AI doesn't 'know' facts; it predicts words. This leads to confident but false claims." },
+        spec: { title: "S.P.E.C. Rule", content: "Specific, Purpose, Example, Constraints. Use these to get high-quality AI answers." },
+        ethics: { title: "AI Ethics", content: "Always use AI to assist your brain, not replace it. Be honest about using AI in your work." }
+    };
+    const data = wikiDetails[topic];
+    document.getElementById('wikiBody').innerHTML = `<h1>${data.title}</h1><p>${data.content}</p>`;
+    document.getElementById('wikiOverlay').classList.add('active');
+}
+
+function closeWiki() { document.getElementById('wikiOverlay').classList.remove('active'); }
+function resetChat() { location.reload(); }
+
+window.onload = () => {
+    addBotMsg("Hi! 🎓 I'm TalkBot. You can ask me questions using the suggestions on the left, or try the quiz!");
+    document.getElementById('q-text').innerText = quizData[0].q;
+};
