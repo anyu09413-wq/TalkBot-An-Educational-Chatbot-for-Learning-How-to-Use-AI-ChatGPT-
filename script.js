@@ -1,160 +1,97 @@
-/**
- * TalkBot Engine v4.0 - Full Featured Dashboard
- * Includes 10-Question Quiz & Custom Q&A Logic
- */
-
-// 1. Hard-coded Q&A for Free Typing (Audience interaction)
 const customQA = [
-    { q: ["hi", "hello", "hey"], a: "Hello! How can I help you today?" },
-    { q: ["name", "who are you"], a: "I’m an AI assistant. You can call me ChatGPT." },
-    { q: ["how are you", "how's it going"], a: "I’m doing well, thank you! How can I assist you?" },
-    { q: ["what can you do", "help me"], a: "I can answer questions, explain topics, help with homework, write text, and more." },
-    { q: ["what is ai", "define ai"], a: "AI (Artificial Intelligence) is technology that allows machines to learn, think, and solve problems like humans." },
-    { q: ["photosynthesis"], a: "Photosynthesis is the process by which plants use sunlight, water, and carbon dioxide to produce food (glucose) and oxygen." }
+    { q: ["hi", "hello"], a: "Hello! How can I help you today?" },
+    { q: ["name"], a: "I’m an AI assistant. You can call me ChatGPT." },
+    { q: ["how are you"], a: "I’m doing well, thank you! How can I assist you?" },
+    { q: ["what can you do"], a: "I can answer questions, explain topics, help with homework, and more." },
+    { q: ["what is ai"], a: "AI is technology that allows machines to learn and solve problems like humans." },
+    { q: ["photosynthesis"], a: "Photosynthesis is how plants use sunlight to make food and oxygen." }
 ];
 
-// 2. 10-Question Speed Quiz Data
 const quizData = [
     { q: "Is AI always 100% accurate?", a: false },
-    { q: "Does ChatGPT 'think' like a human?", a: false },
-    { q: "Can AI help you brainstorm ideas?", a: true },
+    { q: "Does ChatGPT think like a human?", a: false },
+    { q: "Can AI brainstorm ideas?", a: true },
     { q: "Should you share passwords with AI?", a: false },
     { q: "Is 'Hallucination' when AI lies?", a: true },
     { q: "Does AI have real feelings?", a: false },
-    { q: "Can AI summarize long books?", a: true },
-    { q: "Should you check AI facts with a book?", a: true },
+    { q: "Can AI summarize books?", a: true },
+    { q: "Should you verify AI facts?", a: true },
     { q: "Is AI better than a teacher?", a: false },
-    { q: "Can AI write creative stories?", a: true }
+    { q: "Can AI write stories?", a: true }
 ];
 
 let currentQuizIdx = 0;
 let masteredCount = 0;
 
-// 3. Dialogue Data (Choice-based)
 const chatData = {
-    "start": {
-        message: "Welcome to the Learning Hub! 🎓 I'm TalkBot. Use the buttons below or type your own question in the box!",
-        options: [
-            { text: "📝 Prompt Rules", next: "rules" },
-            { text: "🛡️ Safety Tips", next: "safety" }
-        ],
-        unlock: "card-2"
-    },
-    "rules": {
-        message: "Remember the **S.P.E.C.** rule: Specific, Purpose, Examples, and Constraints. This makes your prompts 10x better!",
-        options: [{ text: "Got it!", next: "start" }],
-        mastered: true
-    },
-    "safety": {
-        message: "Never copy AI work without checking it first. Use it to *learn*, not just to *finish*.",
-        options: [{ text: "I agree", next: "start" }],
-        mastered: true
-    }
+    "start": { message: "Welcome! 🎓 Use the buttons below or type your questions!", options: [{ text: "Prompt Rules", next: "rules" }, { text: "Safety Tips", next: "safety" }] },
+    "rules": { message: "Remember S.P.E.C: Specific, Purpose, Example, Constraints!", options: [{ text: "Got it!", next: "start" }], mastered: true },
+    "safety": { message: "Never copy AI work without understanding it first.", options: [{ text: "Understood", next: "start" }], mastered: true }
 };
 
-// --- CORE FUNCTIONS ---
+function playGame(choice) {
+    const fb = document.getElementById('q-feedback');
+    const correct = quizData[currentQuizIdx].a;
+    fb.innerHTML = (choice === correct) ? "✅ Correct!" : "❌ Wrong!";
+    fb.style.color = (choice === correct) ? "#00b894" : "#ff8fb1";
 
-// Handle Free Typing (Audience Interaction)
+    setTimeout(() => {
+        currentQuizIdx++;
+        if (currentQuizIdx < quizData.length) {
+            document.getElementById('q-text').innerText = quizData[currentQuizIdx].q;
+            fb.innerHTML = "";
+        } else {
+            document.getElementById('q-text').innerText = "Quiz Finished! 🏆";
+            document.querySelectorAll('.quiz-opt').forEach(b => b.style.display = 'none');
+        }
+    }, 1000);
+}
+
 document.getElementById('sendBtn').onclick = () => {
     const input = document.getElementById('userInput');
     const text = input.value.trim().toLowerCase();
     if(!text) return;
-
-    addUserMsg(input.value);
-    input.value = "";
-
+    addUserMsg(input.value); input.value = "";
     setTimeout(() => {
-        // Search for a match in our custom Q&A list
-        let response = "That's a great question! I'm still learning that specific topic. Try asking about AI or Photosynthesis!";
-        
-        for (let item of customQA) {
-            if (item.q.some(keyword => text.includes(keyword))) {
-                response = item.a;
-                break;
-            }
-        }
-
-        addBotMsg(response);
+        let reply = "Great question! I'm still learning, but check my knowledge cards!";
+        for (let item of customQA) { if (item.q.some(k => text.includes(k))) { reply = item.a; break; } }
+        addBotMsg(reply);
     }, 600);
 };
 
-// Handle Quiz Logic
-function playGame(userChoice) {
-    const fb = document.getElementById('q-feedback');
-    const questionText = document.getElementById('q-text');
-    const correct = quizData[currentQuizIdx].a;
-
-    if (userChoice === correct) {
-        fb.innerHTML = "✅ Correct!";
-        fb.style.color = "#00b894";
-    } else {
-        fb.innerHTML = "❌ Wrong!";
-        fb.style.color = "#ff8fb1";
-    }
-
-    // Move to next question after delay
-    setTimeout(() => {
-        currentQuizIdx++;
-        if (currentQuizIdx < quizData.length) {
-            questionText.innerText = quizData[currentQuizIdx].q;
-            fb.innerHTML = "";
-        } else {
-            questionText.innerText = "Quiz Finished! 🏆";
-            document.querySelectorAll('.game-btn').forEach(b => b.style.display = 'none');
-        }
-    }, 1200);
+function clickWiki(topic) {
+    let res = "";
+    if(topic === 'hallucination') res = "**Hallucination** 🕵️: AI predicts words, it doesn't 'know' facts. Always verify!";
+    else if(topic === 'spec') res = "**S.P.E.C.** ✍️: Specific, Purpose, Example, Constraints. Try it now!";
+    else if(topic === 'ethics') res = "**Ethics** 🛡️: Use AI to enhance your learning, not to cheat. Be responsible!";
+    addBotMsg(res);
 }
 
-// Bot Message Helper
 function addBotMsg(text) {
     const display = document.getElementById('chatDisplay');
     const botMsg = document.createElement('div');
-    botMsg.className = "msg bot";
-    botMsg.innerHTML = `✨ <strong>TalkBot:</strong><br>${text}`;
-    display.appendChild(botMsg);
-    scrollChat();
+    botMsg.className = "msg bot"; botMsg.innerHTML = `✨ <strong>TalkBot:</strong><br>${text}`;
+    display.appendChild(botMsg); scrollChat();
 }
 
-// User Message Helper
 function addUserMsg(text) {
     const display = document.getElementById('chatDisplay');
     const userMsg = document.createElement('div');
-    userMsg.className = "msg user";
-    userMsg.innerText = text;
-    display.appendChild(userMsg);
-    scrollChat();
+    userMsg.className = "msg user"; userMsg.innerText = text;
+    display.appendChild(userMsg); scrollChat();
 }
 
-function scrollChat() {
-    const display = document.getElementById('chatDisplay');
-    display.scrollTo({ top: display.scrollHeight, behavior: 'smooth' });
-}
-
-// Choice-based render
 function renderStep(id) {
-    const step = chatData[id];
-    addBotMsg(step.message);
-    
-    const optionsArea = document.getElementById('optionsArea');
-    optionsArea.innerHTML = "";
-    
+    const step = chatData[id]; addBotMsg(step.message);
+    const area = document.getElementById('optionsArea'); area.innerHTML = "";
     step.options.forEach(opt => {
-        const btn = document.createElement('button');
-        btn.className = "choice-btn";
-        btn.innerText = opt.text;
-        btn.onclick = () => {
-            addUserMsg(opt.text);
-            renderStep(opt.next);
-        };
-        optionsArea.appendChild(btn);
+        const btn = document.createElement('button'); btn.className = "choice-btn"; btn.innerText = opt.text;
+        btn.onclick = () => { addUserMsg(opt.text); renderStep(opt.next); };
+        area.appendChild(btn);
     });
-
-    if(step.unlock) document.getElementById(step.unlock).classList.add('unlocked');
+    if(step.mastered) { masteredCount++; document.getElementById('mastered-count').innerText = masteredCount; document.getElementById('progress-fill').style.width = (masteredCount*50)+"%"; }
 }
 
-// Support Enter Key
-document.getElementById('userInput').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') document.getElementById('sendBtn').click();
-});
-
-window.onload = () => renderStep('start');
+function scrollChat() { const d = document.getElementById('chatDisplay'); d.scrollTo({top: d.scrollHeight, behavior: 'smooth'}); }
+function resetChat() { location.reload(); }
+window.onload = () => { renderStep('start'); document.getElementById('q-text').innerText = quizData[0].q; };
