@@ -1,246 +1,48 @@
-/* --- 1. 核心变量与基础设置 --- */
 :root {
-    --primary: #9d81ff;       /* 浪漫紫 */
-    --accent: #ff8fb1;        /* 少女粉 */
-    --success: #00b894;       /* 成功绿 */
-    --warning: #ff7675;       /* 错误红 */
-    --glass: rgba(255, 255, 255, 0.8);
-    --white: #ffffff;
-    --text-main: #2d3436;
-    --text-muted: #636e72;
+    --primary: #9d81ff; --accent: #ff8fb1; --success: #00b894;
+    --bg-gradient: linear-gradient(135deg, #fdf2f8 0%, #f5f3ff 100%);
+    --glass: rgba(255, 255, 255, 0.75); --white: #ffffff;
 }
 
-* {
-    box-sizing: border-box;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+* { box-sizing: border-box; transition: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+body { margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-gradient); height: 100vh; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+
+.bg-blob { position: absolute; width: 500px; height: 500px; background: var(--primary); filter: blur(150px); opacity: 0.1; z-index: -1; top: -100px; left: -100px; }
+
+.dashboard { width: 96vw; height: 92vh; display: flex; gap: 20px; padding: 15px; }
+.side-panel { width: 300px; display: flex; flex-direction: column; gap: 20px; }
+
+.main-chat { 
+    flex: 1; display: flex; flex-direction: column; background: var(--glass); 
+    backdrop-filter: blur(30px); border-radius: 35px; border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 25px 50px rgba(157, 129, 255, 0.1); overflow: hidden;
 }
 
-body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    background: radial-gradient(circle at top left, #fdf2f8, #f5f3ff);
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden; /* 禁止全屏滚动，只允许局部滚动 */
-}
+.glass-card { background: var(--glass); border-radius: 24px; padding: 20px; border: 1px solid rgba(255, 255, 255, 0.5); }
+.card-title { font-size: 0.95rem; font-weight: 800; margin-bottom: 12px; color: var(--primary); }
 
-/* --- 2. 背景装饰层 --- */
-.bg-blob {
-    position: absolute;
-    width: 600px;
-    height: 600px;
-    background: var(--primary);
-    filter: blur(160px);
-    opacity: 0.12;
-    z-index: -1;
-    top: -100px;
-    left: -100px;
-}
+/* 右侧卡片增强 */
+.wiki-card { cursor: pointer; border: 1px solid rgba(157, 129, 255, 0.2); }
+.wiki-card:hover { transform: translateY(-5px); border-color: var(--primary); background: var(--white); box-shadow: 0 10px 20px rgba(157, 129, 255, 0.1); }
 
-/* --- 3. Dashboard 三栏布局 --- */
-.dashboard {
-    width: 96vw;
-    height: 92vh;
-    display: flex;
-    gap: 24px;
-    padding: 10px;
-}
+.chat-header { padding: 20px 30px; background: rgba(255,255,255,0.4); border-bottom: 1px solid rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; }
+.avatar-glow { width: 40px; height: 40px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem; }
 
-/* 侧边栏统一宽度 */
-.side-panel {
-    width: 320px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
+.chat-portal { flex: 1; padding: 25px 35px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; scrollbar-width: none; }
+.msg { max-width: 80%; padding: 16px 22px; border-radius: 24px; font-size: 0.95rem; line-height: 1.6; animation: fadeInUp 0.4s ease; }
+.bot { background: var(--white); align-self: flex-start; border-bottom-left-radius: 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+.user { background: var(--primary); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
 
-/* 中间聊天主场 */
-.main-chat {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    background: var(--glass);
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
-    border-radius: 40px;
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    box-shadow: 0 25px 60px rgba(157, 129, 255, 0.1);
-    overflow: hidden;
-}
+.options-area { padding: 15px 30px; display: flex; flex-wrap: wrap; gap: 10px; }
+.choice-btn { background: var(--white); border: 2px solid var(--primary); color: var(--primary); padding: 10px 18px; border-radius: 14px; font-weight: 700; cursor: pointer; }
+.choice-btn:hover { background: var(--primary); color: white; }
 
-/* --- 4. 玻璃拟态卡片 (Glass Cards) --- */
-.glass-card {
-    background: var(--glass);
-    backdrop-filter: blur(20px);
-    border-radius: 28px;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    padding: 24px;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.04);
-}
+.input-bar { padding: 20px 30px; background: var(--white); display: flex; gap: 15px; }
+#userInput { flex: 1; border: 2px solid #f1f1f1; padding: 14px; border-radius: 15px; outline: none; }
+.send-btn { background: var(--primary); color: white; border: none; padding: 0 25px; border-radius: 15px; font-weight: 700; cursor: pointer; }
 
-.card-title {
-    font-size: 1rem;
-    font-weight: 800;
-    margin-bottom: 15px;
-    color: var(--primary);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
+.progress-container { height: 10px; background: #eee; border-radius: 10px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--accent); width: 0%; transition: 0.5s; }
 
-/* --- 5. 聊天区域 (Chat Portal) --- */
-.chat-header {
-    padding: 20px 35px;
-    background: rgba(255, 255, 255, 0.4);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.chat-portal {
-    flex: 1;
-    padding: 30px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    scrollbar-width: none;
-}
-
-.chat-portal::-webkit-scrollbar { display: none; }
-
-/* 气泡设计 */
-.msg {
-    max-width: 82%;
-    padding: 16px 22px;
-    border-radius: 24px;
-    font-size: 0.95rem;
-    line-height: 1.6;
-    animation: slideIn 0.4s ease-out forwards;
-}
-
-.bot {
-    background: var(--white);
-    color: var(--text-main);
-    align-self: flex-start;
-    border-bottom-left-radius: 4px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
-}
-
-.user {
-    background: linear-gradient(135deg, var(--primary), #b199ff);
-    color: var(--white);
-    align-self: flex-end;
-    border-bottom-right-radius: 4px;
-    box-shadow: 0 8px 20px rgba(157, 129, 255, 0.25);
-}
-
-/* --- 6. 输入与交互 (Interactive Area) --- */
-.options-area {
-    padding: 15px 35px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-}
-
-.input-bar {
-    padding: 25px 35px;
-    background: var(--white);
-    display: flex;
-    gap: 15px;
-    border-top: 1px solid #f1f1f1;
-}
-
-#userInput {
-    flex: 1;
-    border: 2px solid #f5f5f5;
-    padding: 15px;
-    border-radius: 18px;
-    outline: none;
-    font-family: inherit;
-    font-size: 0.95rem;
-}
-
-#userInput:focus { border-color: var(--primary); background: #fafaff; }
-
-.send-btn {
-    background: var(--primary);
-    color: var(--white);
-    border: none;
-    padding: 0 30px;
-    border-radius: 18px;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-.send-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(157, 129, 255, 0.3); }
-
-/* --- 7. 小游戏与进度条 (Quiz & Progress) --- */
-.quiz-controls {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.choice-btn {
-    background: var(--white);
-    border: 2px solid var(--primary);
-    color: var(--primary);
-    padding: 12px;
-    border-radius: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    font-size: 0.85rem;
-}
-
-.choice-btn:hover { background: #f1eeff; transform: scale(1.02); }
-
-.progress-container {
-    height: 10px;
-    background: #eee;
-    border-radius: 10px;
-    overflow: hidden;
-    margin: 10px 0;
-}
-
-.progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent), var(--primary));
-    width: 0%; /* JS 动态控制 */
-}
-
-/* 知识卡片状态 */
-.wiki-card {
-    opacity: 0.4;
-    filter: grayscale(1);
-    transform: scale(0.95);
-}
-
-.wiki-card.unlocked {
-    opacity: 1;
-    filter: grayscale(0);
-    transform: scale(1);
-    border: 2px solid var(--accent);
-}
-
-/* --- 8. 动画效果 --- */
-@keyframes slideIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.restart-link {
-    background: none;
-    border: none;
-    color: var(--text-muted);
-    font-size: 0.8rem;
-    text-decoration: underline;
-    cursor: pointer;
-    font-weight: 600;
-}
-
-.restart-link:hover { color: var(--warning); }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.restart-link { background: none; border: none; color: #999; text-decoration: underline; cursor: pointer; }
