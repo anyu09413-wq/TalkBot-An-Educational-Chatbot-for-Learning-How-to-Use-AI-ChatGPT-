@@ -3,26 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TalkBot | AI Learning Dashboard</title>
+    <title>TalkBot | Professional AI Learning Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <div class="bg-blob"></div>
 
     <div class="dashboard">
-        
         <aside class="side-panel">
             <div class="glass-card">
                 <div class="card-title">🎮 Speed Quiz (10 Questions)</div>
                 <div class="game-box">
-                    <p id="q-text" style="font-size: 0.9rem; min-height: 45px; font-weight: 600;">
-                        Wait for the first question...
-                    </p>
+                    <p id="q-text" style="font-size: 0.9rem; min-height: 45px; font-weight: 600;">Loading quiz...</p>
                     <div class="quiz-controls">
-                        <button class="choice-btn" onclick="playGame(false)" style="width: 100%; margin-bottom: 8px; border-color: var(--accent); color: var(--accent);">❌ No / False</button>
-                        <button class="choice-btn" onclick="playGame(true)" style="width: 100%; border-color: var(--success); color: var(--success);">✅ Yes / True</button>
+                        <button class="choice-btn quiz-opt" onclick="playGame(false)">❌ No / False</button>
+                        <button class="choice-btn quiz-opt" onclick="playGame(true)">✅ Yes / True</button>
                     </div>
                     <p id="q-feedback" style="font-size: 0.8rem; margin-top: 12px; font-weight: 800;"></p>
                 </div>
@@ -30,55 +26,46 @@
 
             <div class="glass-card">
                 <div class="card-title">📊 Learning Progress</div>
-                <p style="font-size: 0.8rem; margin-bottom: 10px;">
-                    Key Concepts Mastered: <span id="mastered-count" style="color: var(--primary); font-weight: 800;">0</span>
-                </p>
-                <div class="progress-container">
-                    <div id="progress-fill" class="progress-fill"></div>
-                </div>
-                <p style="font-size: 0.7rem; color: #999; margin-top: 10px;">Explore all buttons to reach 100%!</p>
+                <p style="font-size: 0.8rem; margin-bottom: 10px;">Concepts Mastered: <span id="mastered-count" style="color: var(--primary); font-weight: 800;">0</span></p>
+                <div class="progress-container"><div id="progress-fill" class="progress-fill"></div></div>
             </div>
         </aside>
 
         <main class="main-chat">
             <header class="chat-header">
                 <div style="display: flex; align-items: center; gap: 12px;">
-                    <div class="avatar-glow" style="width: 40px; height: 40px; font-size: 1.2rem;">🤖</div>
+                    <div class="avatar-glow">🤖</div>
                     <div>
                         <strong style="font-size: 1rem; display: block;">TalkBot Console</strong>
                         <span style="font-size: 0.7rem; color: var(--success); font-weight: 700;">● SYSTEM ACTIVE</span>
                     </div>
                 </div>
-                <button onclick="resetChat()" class="restart-link" style="margin-top: 0; width: auto;">Reset Journey</button>
+                <button onclick="resetChat()" class="restart-link">Reset Journey</button>
             </header>
 
             <div class="chat-portal" id="chatDisplay"></div>
-
             <div class="options-area" id="optionsArea"></div>
 
             <div class="input-bar">
-                <input type="text" id="userInput" placeholder="Ask me: 'What is AI?' or 'Explain photosynthesis'...">
+                <input type="text" id="userInput" placeholder="Ask: 'Hi', 'What is AI?' or 'Explain photosynthesis'...">
                 <button class="send-btn" id="sendBtn">Send</button>
             </div>
         </main>
 
         <aside class="side-panel">
-            <div class="glass-card wiki-card" id="card-1">
+            <div class="glass-card wiki-card" id="card-1" onclick="clickWiki('hallucination')">
                 <div class="card-title">📖 Hallucination</div>
-                <p style="font-size: 0.75rem; line-height: 1.4;">When AI sounds confident but gives completely wrong information. Always double-check!</p>
+                <p style="font-size: 0.75rem; line-height: 1.4;">When AI sounds confident but gives wrong info. Click to learn more!</p>
             </div>
-            
-            <div class="glass-card wiki-card" id="card-2">
+            <div class="glass-card wiki-card" id="card-2" onclick="clickWiki('spec')">
                 <div class="card-title">✍️ S.P.E.C. Rule</div>
-                <p style="font-size: 0.75rem; line-height: 1.4;">Specific, Purpose, Example, Constraints. Use these 4 to write the perfect prompt.</p>
+                <p style="font-size: 0.75rem; line-height: 1.4;">Specific, Purpose, Example, Constraints. The key to perfect prompts.</p>
             </div>
-
-            <div class="glass-card wiki-card" id="card-3">
+            <div class="glass-card wiki-card" id="card-3" onclick="clickWiki('ethics')">
                 <div class="card-title">🛡️ Ethics</div>
-                <p style="font-size: 0.75rem; line-height: 1.4;">AI is a co-pilot, not the pilot. Using it for homework means understanding, not just copying.</p>
+                <p style="font-size: 0.75rem; line-height: 1.4;">AI is a co-pilot, not the pilot. Click to see how to use it safely.</p>
             </div>
         </aside>
-
     </div>
 
     <script src="script.js"></script>
