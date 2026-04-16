@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TalkBot | 专业 AI 教育控制台</title>
+    <title>TalkBot | Professional AI Learning Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -13,20 +13,20 @@
     <div class="dashboard">
         <aside class="side-panel">
             <div class="glass-card">
-                <div class="card-title">🎮 Speed Quiz (10 题挑战)</div>
+                <div class="card-title">🎮 Speed Quiz (10 Questions)</div>
                 <div class="game-box">
-                    <p id="q-text" style="font-size: 0.9rem; min-height: 45px; font-weight: 600;">加载中...</p>
+                    <p id="q-text" style="font-size: 0.9rem; min-height: 45px; font-weight: 600;">Loading...</p>
                     <div class="quiz-controls">
-                        <button class="choice-btn quiz-opt" onclick="playGame(false)">❌ 错误 / 否</button>
-                        <button class="choice-btn quiz-opt" onclick="playGame(true)">✅ 正确 / 是</button>
+                        <button class="choice-btn quiz-opt" onclick="playGame(false)">❌ False</button>
+                        <button class="choice-btn quiz-opt" onclick="playGame(true)">✅ True</button>
                     </div>
                     <p id="q-feedback" style="font-size: 0.8rem; margin-top: 12px; font-weight: 800;"></p>
                 </div>
             </div>
 
             <div class="glass-card">
-                <div class="card-title">📊 学习进度</div>
-                <p style="font-size: 0.8rem; margin-bottom: 10px;">已掌握概念: <span id="mastered-count" style="color: var(--primary); font-weight: 800;">0</span></p>
+                <div class="card-title">📊 Learning Progress</div>
+                <p style="font-size: 0.8rem; margin-bottom: 10px;">Mastered: <span id="mastered-count" style="color: var(--primary); font-weight: 800;">0</span></p>
                 <div class="progress-container"><div id="progress-fill" class="progress-fill"></div></div>
             </div>
         </aside>
@@ -37,42 +37,41 @@
                     <div class="avatar-glow">🤖</div>
                     <div>
                         <strong style="font-size: 1rem; display: block;">TalkBot Console</strong>
-                        <span style="font-size: 0.7rem; color: var(--success); font-weight: 700;">● 系统运行中</span>
+                        <span style="font-size: 0.7rem; color: var(--success); font-weight: 700;">● SYSTEM ACTIVE</span>
                     </div>
                 </div>
-                <button onclick="resetChat()" class="restart-link">重置对话</button>
+                <button onclick="resetChat()" class="restart-link">Reset Session</button>
             </header>
 
             <div class="chat-portal" id="chatDisplay"></div>
             <div class="options-area" id="optionsArea"></div>
 
             <div class="input-bar">
-                <input type="text" id="userInput" placeholder="试着问: 'Hi', '什么是AI?' 或 '光合作用'...">
-                <button class="send-btn" id="sendBtn">发送</button>
+                <input type="text" id="userInput" placeholder="Ask: 'Hi', 'What is AI?' or 'Photosynthesis'...">
+                <button class="send-btn" id="sendBtn">Send</button>
             </div>
         </main>
 
         <aside class="side-panel">
             <div class="glass-card wiki-card" onclick="openWiki('hallucination')">
                 <div class="card-title">📖 Hallucination</div>
-                <p style="font-size: 0.75rem; line-height: 1.4;">当 AI 听起来很自信但给出了错误信息。点击查看深度解析！</p>
+                <p style="font-size: 0.75rem; line-height: 1.4;">When AI sounds confident but gives wrong info. Click to dive deep!</p>
             </div>
             <div class="glass-card wiki-card" onclick="openWiki('spec')">
                 <div class="card-title">✍️ S.P.E.C. Rule</div>
-                <p style="font-size: 0.75rem; line-height: 1.4;">Specific, Purpose, Example, Constraints. 写出完美 Prompt 的金法则。</p>
+                <p style="font-size: 0.75rem; line-height: 1.4;">The golden formula for perfect prompts. Click to see how it works.</p>
             </div>
             <div class="glass-card wiki-card" onclick="openWiki('ethics')">
                 <div class="card-title">🛡️ Ethics</div>
-                <p style="font-size: 0.75rem; line-height: 1.4;">AI 是副驾驶，不是驾驶员。点击查看如何负责任地使用 AI。</p>
+                <p style="font-size: 0.75rem; line-height: 1.4;">AI is a co-pilot, not the pilot. Click for responsible usage tips.</p>
             </div>
         </aside>
     </div>
 
     <div id="wikiOverlay" class="wiki-overlay">
         <div class="overlay-content">
-            <button class="close-btn" onclick="closeWiki()">× 返回控制台</button>
-            <div id="wikiBody">
-                </div>
+            <button class="close-btn" onclick="closeWiki()">× Back to Console</button>
+            <div id="wikiBody"></div>
         </div>
     </div>
 
