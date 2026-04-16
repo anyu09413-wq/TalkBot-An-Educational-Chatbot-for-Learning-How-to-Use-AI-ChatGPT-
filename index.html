@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TalkBot | Professional AI Learning Dashboard</title>
+    <title>TalkBot | AI Learning Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -13,10 +13,10 @@
     <div class="dashboard">
         <aside class="side-panel">
             <div class="glass-card">
-                <div class="card-title">🎮 Speed Quiz (10 Questions)</div>
+                <div class="card-title">🎮 Speed Quiz</div>
                 <div class="game-box">
                     <p id="q-text" style="font-size: 0.9rem; min-height: 45px; font-weight: 600;">Loading...</p>
-                    <div class="quiz-controls">
+                    <div class="quiz-controls" id="quiz-controls">
                         <button class="choice-btn quiz-opt" onclick="playGame(false)">❌ False</button>
                         <button class="choice-btn quiz-opt" onclick="playGame(true)">✅ True</button>
                     </div>
@@ -25,9 +25,13 @@
             </div>
 
             <div class="glass-card">
-                <div class="card-title">📊 Learning Progress</div>
-                <p style="font-size: 0.8rem; margin-bottom: 10px;">Mastered: <span id="mastered-count" style="color: var(--primary); font-weight: 800;">0</span></p>
-                <div class="progress-container"><div id="progress-fill" class="progress-fill"></div></div>
+                <div class="card-title">💡 Things to Ask</div>
+                <div class="suggested-box">
+                    <button class="suggest-item" onclick="askSuggested('What is AI?')">❓ What is AI?</button>
+                    <button class="suggest-item" onclick="askSuggested('How does AI learn?')">❓ How does AI learn?</button>
+                    <button class="suggest-item" onclick="askSuggested('What are Prompt rules?')">❓ Prompt rules?</button>
+                    <button class="suggest-item" onclick="askSuggested('Is AI always right?')">❓ Is AI always right?</button>
+                </div>
             </div>
         </aside>
 
@@ -44,10 +48,8 @@
             </header>
 
             <div class="chat-portal" id="chatDisplay"></div>
-            <div class="options-area" id="optionsArea"></div>
-
             <div class="input-bar">
-                <input type="text" id="userInput" placeholder="Ask: 'Hi', 'What is AI?' or 'Photosynthesis'...">
+                <input type="text" id="userInput" placeholder="Type one of the questions on the left...">
                 <button class="send-btn" id="sendBtn">Send</button>
             </div>
         </main>
@@ -55,22 +57,22 @@
         <aside class="side-panel">
             <div class="glass-card wiki-card" onclick="openWiki('hallucination')">
                 <div class="card-title">📖 Hallucination</div>
-                <p style="font-size: 0.75rem; line-height: 1.4;">When AI sounds confident but gives wrong info. Click to dive deep!</p>
+                <p style="font-size: 0.75rem;">Confidence vs. Accuracy.</p>
             </div>
             <div class="glass-card wiki-card" onclick="openWiki('spec')">
                 <div class="card-title">✍️ S.P.E.C. Rule</div>
-                <p style="font-size: 0.75rem; line-height: 1.4;">The golden formula for perfect prompts. Click to see how it works.</p>
+                <p style="font-size: 0.75rem;">Formula for prompts.</p>
             </div>
             <div class="glass-card wiki-card" onclick="openWiki('ethics')">
                 <div class="card-title">🛡️ Ethics</div>
-                <p style="font-size: 0.75rem; line-height: 1.4;">AI is a co-pilot, not the pilot. Click for responsible usage tips.</p>
+                <p style="font-size: 0.75rem;">Co-pilot, not pilot.</p>
             </div>
         </aside>
     </div>
 
     <div id="wikiOverlay" class="wiki-overlay">
         <div class="overlay-content">
-            <button class="close-btn" onclick="closeWiki()">× Back to Console</button>
+            <button class="close-btn" onclick="closeWiki()">× Back</button>
             <div id="wikiBody"></div>
         </div>
     </div>
