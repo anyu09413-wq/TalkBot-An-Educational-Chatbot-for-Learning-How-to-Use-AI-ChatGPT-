@@ -3,24 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TalkBot | AI Education Dashboard</title>
+    <title>TalkBot | AI Learning Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <div class="bg-blob"></div>
 
     <div class="dashboard">
-        
         <aside class="side-panel">
-            
             <div class="glass-card">
                 <div class="card-title">🎮 Speed Quiz</div>
                 <div class="game-box">
-                    <p id="q-text" style="font-size: 0.9rem; min-height: 45px; font-weight: 600;">
-                        Loading quiz...
-                    </p>
+                    <p id="q-text" style="font-size: 0.9rem; min-height: 45px; font-weight: 600;">Loading quiz...</p>
                     <div class="quiz-controls" id="quiz-controls">
                         <button class="choice-btn quiz-opt" onclick="playGame(false)" style="border-color: var(--accent); color: var(--accent);">❌ False</button>
                         <button class="choice-btn quiz-opt" onclick="playGame(true)" style="border-color: var(--success); color: var(--success);">✅ True</button>
@@ -40,10 +35,9 @@
             </div>
 
             <div class="glass-card">
-                <div class="card-title">📊 Session Stats</div>
-                <p style="font-size: 0.75rem; color: var(--text-muted);">
-                    Complete the quiz and click knowledge cards to master AI literacy!
-                </p>
+                <div class="card-title">📊 Session Progress</div>
+                <p style="font-size: 0.8rem; margin-bottom: 10px;">Concepts Mastered: <span id="mastered-count" style="color: var(--primary); font-weight: 800;">0</span></p>
+                <div class="progress-container"><div id="progress-fill" class="progress-fill"></div></div>
             </div>
         </aside>
 
@@ -58,11 +52,9 @@
                 </div>
                 <button onclick="resetChat()" class="restart-link">Reset Session</button>
             </header>
-
             <div class="chat-portal" id="chatDisplay"></div>
-
             <div class="input-bar">
-                <input type="text" id="userInput" placeholder="Ask a question or try a suggestion...">
+                <input type="text" id="userInput" placeholder="Type a question or use the suggestions...">
                 <button class="send-btn" id="sendBtn">Send</button>
             </div>
         </main>
@@ -70,27 +62,23 @@
         <aside class="side-panel">
             <div class="glass-card wiki-card" onclick="openWiki('hallucination')">
                 <div class="card-title">📖 Hallucination</div>
-                <p style="font-size: 0.75rem; line-height: 1.4;">When AI sounds confident but is wrong. Click to see why.</p>
+                <p style="font-size: 0.75rem;">When AI is confidently wrong.</p>
             </div>
-            
             <div class="glass-card wiki-card" onclick="openWiki('spec')">
                 <div class="card-title">✍️ S.P.E.C. Rule</div>
-                <p style="font-size: 0.75rem; line-height: 1.4;">The golden formula for perfect prompts. Click for the guide.</p>
+                <p style="font-size: 0.75rem;">Formula for perfect prompts.</p>
             </div>
-
             <div class="glass-card wiki-card" onclick="openWiki('ethics')">
                 <div class="card-title">🛡️ AI Ethics</div>
-                <p style="font-size: 0.75rem; line-height: 1.4;">Using AI responsibly as a co-pilot. Click to learn more.</p>
+                <p style="font-size: 0.75rem;">Responsible AI co-piloting.</p>
             </div>
         </aside>
-
     </div>
 
     <div id="wikiOverlay" class="wiki-overlay">
         <div class="overlay-content">
-            <button class="close-btn" onclick="closeWiki()">× Back to Console</button>
-            <div id="wikiBody">
-                </div>
+            <button class="close-btn" onclick="closeWiki()">× Back</button>
+            <div id="wikiBody"></div>
         </div>
     </div>
 
