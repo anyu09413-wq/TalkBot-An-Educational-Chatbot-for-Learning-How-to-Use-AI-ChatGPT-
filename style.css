@@ -2,16 +2,18 @@
     --primary: #9d81ff; --accent: #ff8fb1; --success: #00b894;
     --bg-gradient: linear-gradient(135deg, #fdf2f8 0%, #f5f3ff 100%);
     --glass: rgba(255, 255, 255, 0.75); --white: #ffffff;
+    --text-main: #2d3436;
 }
 
 * { box-sizing: border-box; transition: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
-body { margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-gradient); height: 100vh; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+body { margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-gradient); height: 100vh; display: flex; justify-content: center; align-items: center; overflow: hidden; color: var(--text-main); }
 
-.bg-blob { position: absolute; width: 500px; height: 500px; background: var(--primary); filter: blur(150px); opacity: 0.1; z-index: -1; top: -100px; left: -100px; }
+.bg-blob { position: absolute; width: 600px; height: 600px; background: var(--primary); filter: blur(150px); opacity: 0.1; z-index: -1; top: -150px; left: -150px; }
 
 .dashboard { width: 96vw; height: 92vh; display: flex; gap: 20px; padding: 15px; }
 .side-panel { width: 300px; display: flex; flex-direction: column; gap: 20px; }
 
+/* 主聊天区 */
 .main-chat { 
     flex: 1; display: flex; flex-direction: column; background: var(--glass); 
     backdrop-filter: blur(30px); border-radius: 35px; border: 1px solid rgba(255, 255, 255, 0.6);
@@ -21,7 +23,7 @@ body { margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; background: var(
 .glass-card { background: var(--glass); border-radius: 24px; padding: 20px; border: 1px solid rgba(255, 255, 255, 0.5); }
 .card-title { font-size: 0.95rem; font-weight: 800; margin-bottom: 12px; color: var(--primary); }
 
-/* 右侧卡片增强 */
+/* 卡片点击反馈 */
 .wiki-card { cursor: pointer; border: 1px solid rgba(157, 129, 255, 0.2); }
 .wiki-card:hover { transform: translateY(-5px); border-color: var(--primary); background: var(--white); box-shadow: 0 10px 20px rgba(157, 129, 255, 0.1); }
 
@@ -40,6 +42,20 @@ body { margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; background: var(
 .input-bar { padding: 20px 30px; background: var(--white); display: flex; gap: 15px; }
 #userInput { flex: 1; border: 2px solid #f1f1f1; padding: 14px; border-radius: 15px; outline: none; }
 .send-btn { background: var(--primary); color: white; border: none; padding: 0 25px; border-radius: 15px; font-weight: 700; cursor: pointer; }
+
+/* 全屏覆盖层 */
+.wiki-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(157, 129, 255, 0.1); backdrop-filter: blur(50px);
+    z-index: 1000; display: flex; justify-content: center; align-items: center;
+    opacity: 0; pointer-events: none; transition: 0.5s ease;
+}
+.wiki-overlay.active { opacity: 1; pointer-events: auto; }
+.overlay-content {
+    background: white; width: 85%; max-width: 800px; max-height: 85vh; padding: 50px;
+    border-radius: 40px; box-shadow: 0 30px 100px rgba(0,0,0,0.1); position: relative; overflow-y: auto;
+}
+.close-btn { position: absolute; top: 25px; right: 30px; background: #f1eeff; border: none; padding: 10px 20px; border-radius: 12px; color: var(--primary); font-weight: 800; cursor: pointer; }
 
 .progress-container { height: 10px; background: #eee; border-radius: 10px; overflow: hidden; }
 .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: 0.5s; }
