@@ -142,3 +142,19 @@ window.onload = () => {
     addBotMsg("Hi! 🎓 I'm TalkBot. Ask me anything about AI or try the quiz!");
     document.getElementById('q-text').innerText = quizData[0].q;
 };
+function improvePrompt() {
+    const labText = document.getElementById('lab-text');
+    // 模拟改写过程
+    labText.innerHTML = "<i>Analyzing... Applying SPEC...</i>";
+    
+    setTimeout(() => {
+        labText.innerHTML = `
+            <b style="color:var(--primary)">Improved:</b><br>
+            "Act as a <b>[Persona]</b> creative writer. 
+            Write a <b>[Specific]</b> 200-word mystery story about a detective cat 
+            <b>[Example]</b> in the style of Sherlock Holmes, 
+            <b>[Constraint]</b> without using the word 'meow'."
+        `;
+        addBotMsg("See the difference? The improved prompt uses **SPEC** to give the AI clear boundaries and a role!");
+    }, 1500);
+}
