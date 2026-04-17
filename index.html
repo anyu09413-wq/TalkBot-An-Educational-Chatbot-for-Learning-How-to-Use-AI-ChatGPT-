@@ -3,241 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TalkBot X | AI Learning Console</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #8b5cf6; /* Vibrant Purple */
-            --primary-glow: rgba(139, 92, 246, 0.4);
-            --secondary: #d946ef; /* Fuchsia */
-            --accent: #06b6d4;
-            --success: #10b981;
-            --danger: #ef4444;
-            --bg-dark: #0f172a;
-            --glass-bg: rgba(30, 41, 59, 0.75);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-        }
-
-        * { box-sizing: border-box; transition: all 0.25s ease; }
-
-        body {
-            margin: 0; font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg-dark);
-            background-image: radial-gradient(circle at 15% 50%, rgba(139, 92, 246, 0.15), transparent 25%),
-                              radial-gradient(circle at 85% 30%, rgba(217, 70, 239, 0.15), transparent 25%);
-            height: 100vh; color: var(--text-main);
-            display: flex; justify-content: center; align-items: center; overflow: hidden;
-        }
-
-        .app-container {
-            width: 96vw; height: 94vh;
-            display: grid; grid-template-columns: 280px 1fr 300px; gap: 20px;
-        }
-
-        .glass-panel {
-            background: var(--glass-bg); backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border); border-radius: 28px;
-            display: flex; flex-direction: column; overflow: hidden;
-        }
-
-        /* Sidebars */
-        .sidebar { padding: 24px; display: flex; flex-direction: column; gap: 20px; }
-        .card-title { font-size: 0.75rem; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
-
-        /* Progress Bar */
-        .stat-card { background: rgba(255,255,255,0.03); padding: 16px; border-radius: 18px; }
-        .progress-container { height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-top: 10px; overflow: hidden; }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); width: 0%; }
-
-        /* Quiz Box */
-        .quiz-box { flex: 1; display: flex; flex-direction: column; justify-content: center; text-align: center; }
-        .quiz-q { font-size: 0.95rem; font-weight: 600; margin-bottom: 20px; line-height: 1.4; }
-        .quiz-btn-group { display: flex; flex-direction: column; gap: 10px; }
-        .quiz-btn { 
-            background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); 
-            color: white; padding: 12px; border-radius: 12px; cursor: pointer; font-weight: 600;
-        }
-        .quiz-btn:hover { border-color: var(--primary); background: var(--primary-glow); }
-
-        /* Chat Area */
-        .main-chat { display: flex; flex-direction: column; }
-        .chat-header { padding: 20px 24px; border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.1); }
-        .chat-display { flex: 1; padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
-        .chat-display::-webkit-scrollbar { width: 4px; }
-        .chat-display::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 10px; }
-
-        .msg { max-width: 85%; padding: 14px 18px; border-radius: 20px; font-size: 0.95rem; line-height: 1.5; animation: slideUp 0.3s ease-out; }
-        .msg-bot { background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); align-self: flex-start; border-bottom-left-radius: 4px; }
-        .msg-user { background: var(--primary); align-self: flex-end; border-bottom-right-radius: 4px; box-shadow: 0 4px 15px var(--primary-glow); }
-
-        .input-area { padding: 20px; display: flex; gap: 12px; border-top: 1px solid var(--glass-border); }
-        #userInput { flex: 1; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); padding: 12px 20px; border-radius: 14px; color: white; outline: none; }
-        #userInput:focus { border-color: var(--primary); }
-        .send-btn { background: var(--primary); border: none; padding: 0 20px; border-radius: 14px; color: white; cursor: pointer; font-weight: 700; }
-
-        /* Suggested Buttons */
-        .suggest-item { 
-            background: transparent; border: 1px dashed var(--primary); color: var(--primary); 
-            padding: 8px 12px; border-radius: 10px; font-size: 0.8rem; cursor: pointer; text-align: left;
-        }
-        .suggest-item:hover { background: var(--primary); color: white; border-style: solid; }
-
-        /* Wiki Cards */
-        .wiki-card { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 16px; border: 1px solid var(--glass-border); cursor: pointer; }
-        .wiki-card:hover { transform: translateY(-3px); border-color: var(--primary); background: rgba(255,255,255,0.08); }
-
-        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    </style>
+    <title>TalkBot | AI Learning Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="bg-blob"></div>
 
-    <div class="app-container">
-        
-        <aside class="glass-panel sidebar">
-            <div class="stat-card">
-                <div class="card-title">Learning Progress</div>
-                <div style="font-size: 1.1rem; font-weight: 800; color: var(--secondary);" id="mastered-count">0/10</div>
-                <div class="progress-container"><div class="progress-fill" id="progress-fill"></div></div>
+    <div class="dashboard">
+        <aside class="side-panel">
+            <div class="glass-card">
+                <div class="card-title">🎮 Speed Quiz</div>
+                <div class="game-box">
+                    <p id="q-text" style="font-size: 0.9rem; min-height: 45px; font-weight: 600;">Loading quiz...</p>
+                    <div class="quiz-controls" id="quiz-controls">
+                        <button class="choice-btn quiz-opt" onclick="playGame(false)" style="border-color: var(--accent); color: var(--accent);">❌ False</button>
+                        <button class="choice-btn quiz-opt" onclick="playGame(true)" style="border-color: var(--success); color: var(--success);">✅ True</button>
+                    </div>
+                    <p id="q-feedback" style="font-size: 0.8rem; margin-top: 12px; font-weight: 800;"></p>
+                </div>
             </div>
 
-            <div class="quiz-box">
-                <div class="card-title">Knowledge Quiz</div>
-                <div class="quiz-q" id="q-text">Loading quiz...</div>
-                <div class="quiz-btn-group" id="q-options">
-                    <button class="quiz-btn" onclick="checkQuiz(true)">TRUE</button>
-                    <button class="quiz-btn" onclick="checkQuiz(false)">FALSE</button>
+            <div class="glass-card">
+                <div class="card-title">💡 Things to Ask</div>
+                <div class="suggested-box">
+                    <button class="suggest-item" onclick="askSuggested('What is AI?')">❓ What is AI?</button>
+                    <button class="suggest-item" onclick="askSuggested('How does AI learn?')">❓ How does AI learn?</button>
+                    <button class="suggest-item" onclick="askSuggested('What are Prompt rules?')">❓ Prompt rules?</button>
+                    <button class="suggest-item" onclick="askSuggested('Is AI always right?')">❓ Is AI always right?</button>
                 </div>
-                <div id="q-feedback" style="margin-top: 15px; font-size: 0.8rem; font-weight: 700;"></div>
+            </div>
+
+            <div class="glass-card">
+                <div class="card-title">📊 Session Progress</div>
+                <p style="font-size: 0.8rem; margin-bottom: 10px;">Concepts Mastered: <span id="mastered-count" style="color: var(--primary); font-weight: 800;">0</span></p>
+                <div class="progress-container"><div id="progress-fill" class="progress-fill"></div></div>
             </div>
         </aside>
 
-        <main class="glass-panel main-chat">
+        <main class="main-chat">
             <header class="chat-header">
-                <div>
-                    <strong style="color: var(--primary);">TalkBot X</strong>
-                    <div style="font-size: 0.7rem; color: var(--success);">● SYSTEM ACTIVE</div>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div class="avatar-glow">🤖</div>
+                    <div>
+                        <strong style="font-size: 1rem; display: block;">TalkBot Console</strong>
+                        <span style="font-size: 0.7rem; color: var(--success); font-weight: 700;">● SYSTEM ACTIVE</span>
+                    </div>
                 </div>
-                <button onclick="location.reload()" style="background:none; border:none; color:var(--text-muted); cursor:pointer; text-decoration:underline; font-size:0.8rem;">Reset</button>
+                <button onclick="resetChat()" class="restart-link">Reset Session</button>
             </header>
-            <div class="chat-display" id="chatDisplay"></div>
-            <div class="input-area">
-                <input type="text" id="userInput" placeholder="Ask about S.P.E.C. or AI Logic...">
+            <div class="chat-portal" id="chatDisplay"></div>
+            <div class="input-bar">
+                <input type="text" id="userInput" placeholder="Type a question or use the suggestions...">
                 <button class="send-btn" id="sendBtn">Send</button>
             </div>
         </main>
 
-        <aside class="glass-panel sidebar">
-            <div class="card-title">Quick Actions</div>
-            <div style="display: flex; flex-direction: column; gap: 8px;">
-                <button class="suggest-item" onclick="ask('What is AI?')">❓ What is AI?</button>
-                <button class="suggest-item" onclick="ask('What is the SPEC rule?')">❓ How to prompt?</button>
-                <button class="suggest-item" onclick="ask('Can AI lie?')">❓ Is AI always right?</button>
+        <aside class="side-panel">
+            <div class="glass-card wiki-card" onclick="openWiki('hallucination')">
+                <div class="card-title">📖 Hallucination</div>
+                <p style="font-size: 0.75rem;">When AI is confidently wrong.</p>
             </div>
-
-            <div class="card-title" style="margin-top: 20px;">Knowledge Base</div>
-            <div class="wiki-card" onclick="ask('Explain Hallucination')">
-                <div style="font-weight: 700; font-size: 0.9rem;">Hallucinations</div>
-                <div style="font-size: 0.75rem; color: var(--text-muted);">When AI makes up facts.</div>
+            <div class="glass-card wiki-card" onclick="openWiki('spec')">
+                <div class="card-title">✍️ S.P.E.C. Rule</div>
+                <p style="font-size: 0.75rem;">Formula for perfect prompts.</p>
             </div>
-            <div class="wiki-card" onclick="ask('What is SPEC rule?')">
-                <div style="font-weight: 700; font-size: 0.9rem;">The S.P.E.C. Rule</div>
-                <div style="font-size: 0.75rem; color: var(--text-muted);">The prompt formula.</div>
+            <div class="glass-card wiki-card" onclick="openWiki('ethics')">
+                <div class="card-title">🛡️ AI Ethics</div>
+                <p style="font-size: 0.75rem;">Responsible AI co-piloting.</p>
             </div>
         </aside>
     </div>
 
-    <script>
-        // Data
-        const quizData = [
-            { q: "Is AI always 100% accurate?", a: false },
-            { q: "Can AI feel human emotions?", a: false },
-            { q: "Should you share passwords with AI?", a: false },
-            { q: "Does 'S' in SPEC stand for Specific?", a: true },
-            { q: "Can AI help with brainstorming?", a: true },
-            { q: "Is AI a 'Prediction Engine'?", a: true },
-            { q: "Do AI models have real-time souls?", a: false },
-            { q: "Can AI summarize long articles?", a: true },
-            { q: "Is 'Hallucination' a technical error?", a: true },
-            { q: "Should you fact-check AI results?", a: true }
-        ];
+    <div id="wikiOverlay" class="wiki-overlay">
+        <div class="overlay-content">
+            <button class="close-btn" onclick="closeWiki()">× Back</button>
+            <div id="wikiBody"></div>
+        </div>
+    </div>
 
-        const knowledge = {
-            "what is ai": "AI (Artificial Intelligence) is a technology that allows computers to mimic human intelligence—learning, reasoning, and problem-solving.",
-            "spec rule": "<b>S.P.E.C.</b> stands for: <b>S</b>pecific, <b>P</b>ersona, <b>E</b>xact format, and <b>C</b>onstraints. Use this to get perfect AI answers!",
-            "hallucination": "A hallucination is when an AI confidently provides incorrect information. Always verify facts from reliable sources!",
-            "ai lie": "AI doesn't 'lie' on purpose. It predicts the next word based on patterns. Sometimes those patterns lead to false info.",
-            "hi": "Hello! I am TalkBot X. Ask me about AI or try the quiz on the left!",
-            "hello": "Hi there! Ready to master AI literacy?"
-        };
-
-        let currentQ = 0;
-        let score = 0;
-
-        // Functions
-        function addMsg(text, sender) {
-            const display = document.getElementById('chatDisplay');
-            const div = document.createElement('div');
-            div.className = `msg msg-${sender}`;
-            div.innerHTML = text;
-            display.appendChild(div);
-            display.scrollTop = display.scrollHeight;
-        }
-
-        function ask(text) {
-            addMsg(text, 'user');
-            setTimeout(() => {
-                let reply = "I'm not sure about that, but try asking about the SPEC rule or AI Hallucinations!";
-                const lower = text.toLowerCase();
-                for (let key in knowledge) {
-                    if (lower.includes(key)) { reply = knowledge[key]; break; }
-                }
-                addMsg(reply, 'bot');
-            }, 600);
-        }
-
-        function checkQuiz(choice) {
-            const feedback = document.getElementById('q-feedback');
-            if (choice === quizData[currentQ].a) {
-                score++;
-                feedback.innerText = "CORRECT! ✨";
-                feedback.style.color = "var(--success)";
-            } else {
-                feedback.innerText = "WRONG! ❌";
-                feedback.style.color = "var(--danger)";
-            }
-
-            setTimeout(() => {
-                currentQ++;
-                updateStats();
-                if (currentQ < quizData.length) {
-                    document.getElementById('q-text').innerText = quizData[currentQ].q;
-                    feedback.innerText = "";
-                } else {
-                    document.getElementById('q-text').innerHTML = `Quiz Complete!<br>Final Score: ${score}/10`;
-                    document.getElementById('q-options').style.display = 'none';
-                }
-            }, 1000);
-        }
-
-        function updateStats() {
-            document.getElementById('mastered-count').innerText = `${currentQ}/10`;
-            document.getElementById('progress-fill').style.width = `${(currentQ/10)*100}%`;
-        }
-
-        document.getElementById('sendBtn').onclick = () => {
-            const input = document.getElementById('userInput');
-            if (input.value.trim()) {
-                ask(input.value);
-                input.value = "";
-            }
-        };
-
-        window.onload = () => {
-            addMsg("Welcome to <b>TalkBot X Console</b>. I am active and ready to help you learn AI.", "bot");
-            document.getElementById('q-text').innerText = quizData[0].q;
-        };
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
