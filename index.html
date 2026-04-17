@@ -37,7 +37,9 @@
             <div class="glass-card">
                 <div class="card-title">📊 Session Progress</div>
                 <p style="font-size: 0.8rem; margin-bottom: 10px;">Concepts Mastered: <span id="mastered-count" style="color: var(--primary); font-weight: 800;">0</span></p>
-                <div class="progress-container"><div id="progress-fill" class="progress-fill"></div></div>
+                <div class="progress-container">
+                    <div id="progress-fill" class="progress-fill"></div>
+                </div>
             </div>
         </aside>
 
@@ -52,9 +54,12 @@
                 </div>
                 <button onclick="resetChat()" class="restart-link">Reset Session</button>
             </header>
-            <div class="chat-portal" id="chatDisplay"></div>
+            
+            <div class="chat-portal" id="chatDisplay">
+                </div>
+
             <div class="input-bar">
-                <input type="text" id="userInput" placeholder="Type a question or use the suggestions...">
+                <input type="text" id="userInput" placeholder="Ask about SPEC, Hallucinations, or HTML...">
                 <button class="send-btn" id="sendBtn">Send</button>
             </div>
         </main>
@@ -64,13 +69,20 @@
                 <div class="card-title">📖 Hallucination</div>
                 <p style="font-size: 0.75rem;">When AI is confidently wrong.</p>
             </div>
+            
             <div class="glass-card wiki-card" onclick="openWiki('spec')">
                 <div class="card-title">✍️ S.P.E.C. Rule</div>
                 <p style="font-size: 0.75rem;">Formula for perfect prompts.</p>
             </div>
+            
             <div class="glass-card wiki-card" onclick="openWiki('ethics')">
                 <div class="card-title">🛡️ AI Ethics</div>
                 <p style="font-size: 0.75rem;">Responsible AI co-piloting.</p>
+            </div>
+
+            <div class="glass-card wiki-card" onclick="openLab()" style="border: 2px solid var(--primary);">
+                <div class="card-title">🔬 Prompt Lab</div>
+                <p style="font-size: 0.75rem;">Interactive SPEC experiments.</p>
             </div>
         </aside>
     </div>
@@ -78,31 +90,11 @@
     <div id="wikiOverlay" class="wiki-overlay">
         <div class="overlay-content">
             <button class="close-btn" onclick="closeWiki()">× Back</button>
-            <div id="wikiBody"></div>
+            <div id="wikiBody">
+                </div>
         </div>
     </div>
 
     <script src="script.js"></script>
 </body>
 </html>
-<div class="glass-card">
-    <div class="card-title">🔬 Prompt Lab</div>
-    <div class="lab-box" style="font-size: 0.8rem;">
-        <p><i>Fix a "Bad Prompt" using SPEC:</i></p>
-        <div id="lab-text" style="background: rgba(0,0,0,0.05); padding: 10px; border-radius: 10px; margin-bottom: 10px;">
-            "Write a story about a cat."
-        </div>
-        <button class="suggest-item" onclick="improvePrompt()">✨ Apply SPEC Rule</button>
-    </div>
-</div>
-<div class="glass-card wiki-card" onclick="openLab()">
-    <div class="card-title">🔬 Prompt Lab</div>
-    <p style="font-size: 0.75rem;">Interactive AI experiments.</p>
-</div>
-
-<div id="wikiOverlay" class="wiki-overlay">
-    <div class="overlay-content">
-        <button class="close-btn" onclick="closeWiki()">× Back</button>
-        <div id="wikiBody"></div>
-    </div>
-</div>
