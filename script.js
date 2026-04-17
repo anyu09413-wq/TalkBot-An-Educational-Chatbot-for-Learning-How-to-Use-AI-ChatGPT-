@@ -158,3 +158,66 @@ function improvePrompt() {
         addBotMsg("See the difference? The improved prompt uses **SPEC** to give the AI clear boundaries and a role!");
     }, 1500);
 }
+// New Data for the 4 Experiments
+const labExperiments = [
+    {
+        title: "Experiment 1: The Persona Shift",
+        bad: "Write a healthy recipe.",
+        good: "Act as a **[Persona]** professional nutritionist. Write a **[Specific]** 500-calorie Mediterranean breakfast recipe using only **[Constraints]** 5 ingredients.",
+        lesson: "Adding a Persona makes the AI sound like an expert rather than a generic search engine."
+    },
+    {
+        title: "Experiment 2: Context is King",
+        bad: "Explain gravity.",
+        good: "Explain gravity **[Purpose]** to a 5-year-old child using **[Example]** a falling apple and a trampoline to make it easy to visualize.",
+        lesson: "Defining your audience (Purpose) changes the complexity level of the answer."
+    },
+    {
+        title: "Experiment 3: The Example Boost",
+        bad: "Write a business email.",
+        good: "Write a formal email to a client. **[Example]** Use a tone similar to: 'Dear [Name], I am writing to follow up...' but make it more enthusiastic.",
+        lesson: "Providing a sample 'tone' or format (Example) helps the AI match your specific style."
+    },
+    {
+        title: "Experiment 4: Strict Constraints",
+        bad: "Summarize this book.",
+        good: "Summarize the book 'The Great Gatsby' **[Constraints]** in exactly 3 bullet points, using no more than 20 words per bullet.",
+        lesson: "Constraints prevent the AI from rambling and keep the output focused."
+    }
+];
+
+function openLab() {
+    let labHTML = `
+        <h1 style="color:var(--primary)">🔬 Prompt Lab: SPEC Playground</h1>
+        <p>Select an experiment to see how the <b>S.P.E.C. Rule</b> transforms a 'Bad Prompt' into a 'Pro Prompt'.</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px;">
+            ${labExperiments.map((exp, index) => `
+                <button class="suggest-item" onclick="runExperiment(${index})" style="margin:0; height:auto; padding:15px;">
+                    <b>${exp.title}</b>
+                </button>
+            `).join('')}
+        </div>
+        <div id="experiment-result" style="margin-top: 25px; padding: 20px; background: #f9f9f9; border-radius: 20px; min-height: 100px; border: 1px dashed var(--primary); display:none;">
+        </div>
+    `;
+    document.getElementById('wikiBody').innerHTML = labHTML;
+    document.getElementById('wikiOverlay').classList.add('active');
+}
+
+function runExperiment(index) {
+    const exp = labExperiments[index];
+    const resultDiv = document.getElementById('experiment-result');
+    resultDiv.style.display = "block";
+    resultDiv.innerHTML = `
+        <h3 style="margin-top:0">${exp.title}</h3>
+        <p><b style="color:var(--accent)">Bad Prompt (Basic):</b><br> <span style="color:var(--text-muted)">"${exp.bad}"</span></p>
+        <p><b style="color:var(--success)">SPEC Prompt (Pro):</b><br> ${exp.good}</p>
+        <hr style="border:none; border-top:1px solid #eee; margin:15px 0;">
+        <p style="font-size:0.9rem;"><b>The Lesson:</b> ${exp.lesson}</p>
+    `;
+    
+    // Also notify the chat
+    addBotMsg(`You just completed **${exp.title}**! Check the Lesson note in the Lab to see why it worked.`);
+}
+
+// Keep your existing openWiki, closeWiki, etc...
