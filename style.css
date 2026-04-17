@@ -48,3 +48,12 @@ body { margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; background: var(
     100% { box-shadow: 0 0 5px var(--primary); }
 }
 .avatar-glow { animation: breathing 3s infinite; }
+#experiment-result {
+    animation: fadeIn 0.5s ease;
+    box-shadow: inset 0 0 15px rgba(157, 129, 255, 0.05);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
