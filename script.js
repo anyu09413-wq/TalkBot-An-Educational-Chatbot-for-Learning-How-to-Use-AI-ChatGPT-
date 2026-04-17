@@ -1,36 +1,20 @@
-// 1. DATA - Massive Keyword Library for "Keyword Magic"
+// ==========================================
+// 1. KNOWLEDGE DATABASE (Keyword Magic)
+// ==========================================
 const customQA = [
-    // --- AI CORE CONCEPTS ---
-    { k: ["spec", "prompt", "rule", "formula", "technique"], a: "The **S.P.E.C. Rule** is your formula for success:<br>• <b>S</b>pecific (Role/Task)<br>• <b>P</b>urpose (Goal)<br>• <b>E</b>xample (Sample data)<br>• <b>C</b>onstraints (Limits). It turns a vague question into a professional answer!" },
-    { k: ["hallucination", "wrong", "lie", "fake", "mistake", "error", "fact"], a: "<b>Hallucinations</b> happen because AI is a 'prediction engine,' not a database. It predicts the next word based on probability. Sometimes, it predicts a word that sounds right but is factually false!" },
-    { k: ["ai", "artificial intelligence", "robot", "machine", "intelligence"], a: "AI is technology that mimics human intelligence. It can recognize images, translate languages, and solve problems! I am a simple example of 'Rule-based AI'." },
-    { k: ["chatgpt", "gpt", "openai", "claude", "gemini", "llm"], a: "Those are 'Large Language Models' (LLMs). They are like my super-intelligent cousins! They use trillions of data points, while I use a set of smart JavaScript rules." },
-    { k: ["learn", "training", "algorithm", "dataset", "machine learning"], a: "AI learns through **Machine Learning**. It processes a 'Dataset' (like thousands of cat photos) to learn patterns without being told the rules explicitly." },
-    { k: ["future", "job", "danger", "terminator", "scary", "replace"], a: "AI is a tool, not a replacement for humans! The future is about **AI-Human Collaboration**. People who learn to 'prompt' will have a huge advantage." },
-    { k: ["ethics", "safe", "privacy", "bias", "fair"], a: "AI Ethics is crucial! We must ensure AI is fair, doesn't leak private data, and isn't used to spread misinformation. Always use AI responsibly!" },
-
-    // --- WEB TECHNOLOGY (HTML/CSS/JS) ---
-    { k: ["html", "skeleton", "structure", "tags"], a: "<b>HTML (HyperText Markup Language)</b> is my skeleton. It defines where the buttons, chat window, and text go. Without it, I'd have no body!" },
-    { k: ["css", "style", "design", "purple", "glass", "glow", "aesthetic"], a: "<b>CSS (Cascading Style Sheets)</b> is my fashion sense! It creates my purple glow, the 'Glassmorphism' (the blurry transparent look), and the cool animations you see." },
-    { k: ["javascript", "js", "brain", "logic", "script"], a: "<b>JavaScript</b> is my brain! 🧠 It allows me to 'think,' check your quiz answers, and match your keywords to these responses in real-time." },
-    { k: ["vanilla", "framework", "react", "vue", "angular"], a: "I am built with **Vanilla JS**—that means no heavy frameworks! It's the purest way to learn web development." },
-    { k: ["web", "internet", "browser", "chrome", "safari"], a: "I live inside your web browser! Every website you visit is a mix of the same three ingredients: HTML, CSS, and JavaScript." },
-
-    // --- DEVELOPER & TALKBOT INFO ---
-    { k: ["who are you", "what is your name", "talkbot", "bot name"], a: "I am **TalkBot X**, your personal AI Learning Assistant. I was built to show how easy it is to start learning about technology." },
-    { k: ["developer", "creator", "who made", "ayu", "anyu", "author", "zhang"], a: "I was created by **Anyu Zhang**, a student leader and web developer based in Malaysia 🇲🇾. Anyu loves sociology, psychology, and building clean web apps!" },
-    { k: ["malaysia", "kl", "home", "reside"], a: "Terima Kasih! My creator is based in Malaysia, a beautiful country known for its amazing food and diversity!" },
-    { k: ["school", "international", "leader", "peer mediator", "leadership"], a: "My creator is a head of a peer mediation group at an international school! That's why I'm designed to be helpful and calm." },
-
-    // --- INTERACTION & CHAT ---
-    { k: ["hi", "hello", "hey", "hola", "morning", "afternoon", "yo"], a: "Hello! 👋 Ready to explore the world of AI? Ask me about **SPEC** or try the **Quiz**!" },
-    { k: ["thank", "thanks", "good", "cool", "awesome", "nice", "love", "great"], a: "You're very welcome! I'm glad you're enjoying the experience. Let's keep learning!" },
-    { k: ["bye", "goodbye", "exit", "stop", "see ya"], a: "Goodbye! Don't forget: stay curious and keep prompting! See you next time. ✨" },
-    { k: ["help", "what can i do", "commands", "how to"], a: "You can ask me about **AI basics, Web Development, or the SPEC rule**. You can also play the **Quiz** on the left to test your knowledge!" },
-    { k: ["joke", "funny", "laugh"], a: "Why did the computer show up late to work? <br>...Because it had a hard drive! 💾 (Sorry, that's my only joke!)" }
+    { k: ["spec", "prompt", "rule", "formula"], a: "The **S.P.E.C. Rule** is your formula for success:<br>• <b>S</b>pecific<br>• <b>P</b>urpose<br>• <b>E</b>xample<br>• <b>C</b>onstraints." },
+    { k: ["hallucination", "wrong", "lie", "fake", "fact"], a: "<b>Hallucinations</b> happen because AI is a 'prediction engine.' It predicts words based on probability, which can sometimes lead to confident but false information!" },
+    { k: ["ai", "artificial intelligence", "robot"], a: "AI is technology that mimics human intelligence. I am a 'Rule-based AI' built to teach you the basics of Prompt Engineering!" },
+    { k: ["chatgpt", "gpt", "openai", "gemini"], a: "Those are Large Language Models (LLMs). They are like my super-intelligent cousins! I am a lightweight version focused on education." },
+    { k: ["html", "css", "javascript", "js", "code"], a: "I was built using **HTML** for structure, **CSS** for my purple glow, and **JavaScript** for my brain. No frameworks, just pure code!" },
+    { k: ["developer", "creator", "who made", "anyu"], a: "I was created by **Anyu Zhang**, a student leader and developer based in Malaysia 🇲🇾 who loves sociology and technology!" },
+    { k: ["hi", "hello", "hey"], a: "Hello! 👋 I'm TalkBot. Ready to explore the world of AI? Ask me about **SPEC** or try the **Quiz**!" },
+    { k: ["thank", "cool", "awesome"], a: "You're welcome! I'm happy to help. Keep exploring!" }
 ];
 
-// --- LOGIC SECTION ---
+// ==========================================
+// 2. QUIZ & WIKI DATA
+// ==========================================
 const quizData = [
     { q: "Is AI always 100% accurate?", a: false },
     { q: "Does ChatGPT think exactly like a human?", a: false },
@@ -47,12 +31,42 @@ const quizData = [
 const wikiDetails = {
     hallucination: { title: "📖 Hallucination", content: "AI models don't have a 'fact database.' They are probability engines that predict the next word. When data is missing, they 'guess' to stay fluent, creating false info." },
     spec: { title: "✍️ S.P.E.C. Rule", content: "Specific: Define the role. Purpose: Define the goal. Example: Show a sample. Constraints: Define limits. This turns vague questions into professional answers." },
-    ethics: { title: "🛡️ AI Ethics", content: "Always use AI to assist your own brain. If you use it for work, be transparent. Never use AI to bypass critical thinking or skip learning." }
+    ethics: { title: "🛡️ AI Ethics", content: "Always use AI to assist your own brain. If you use it for work, be transparent. Never use AI to bypass critical thinking." }
 };
 
-let currentQuizIdx = 0; let userScore = 0; let masteredCount = 0; let unlockedWikis = new Set();
+const labExperiments = [
+    {
+        title: "Exp 1: Persona",
+        bad: "Write a healthy recipe.",
+        good: "Act as a **[Persona]** nutritionist. Write a **[Specific]** breakfast recipe with **[Constraints]** under 500 calories.",
+        lesson: "Personas give the AI an expert 'voice'."
+    },
+    {
+        title: "Exp 2: Purpose",
+        bad: "Explain gravity.",
+        good: "Explain gravity **[Purpose]** to a 5-year-old using **[Example]** a trampoline analogy.",
+        lesson: "Defining your audience changes the complexity of the answer."
+    },
+    {
+        title: "Exp 3: Examples",
+        bad: "Write a business email.",
+        good: "Write a formal follow-up. **[Example]** Use a tone like: 'Dear [Name], just checking in...' but more professional.",
+        lesson: "Examples help the AI match your specific style."
+    },
+    {
+        title: "Exp 4: Constraints",
+        bad: "Summarize a book.",
+        good: "Summarize 'The Great Gatsby' **[Constraints]** in exactly 3 bullet points, 10 words each.",
+        lesson: "Constraints keep the output focused and concise."
+    }
+];
 
-// CORE FUNCTIONS
+// ==========================================
+// 3. CORE LOGIC
+// ==========================================
+let currentQuizIdx = 0, userScore = 0, masteredCount = 0, unlockedWikis = new Set();
+
+// --- Quiz Function ---
 function playGame(choice) {
     const fb = document.getElementById('q-feedback');
     if (choice === quizData[currentQuizIdx].a) { userScore++; fb.innerHTML = "✅ Correct!"; fb.style.color = "#00b894"; }
@@ -64,160 +78,92 @@ function playGame(choice) {
             document.getElementById('q-text').innerText = quizData[currentQuizIdx].q;
             fb.innerHTML = "";
         } else {
-            let rank = userScore > 7 ? "Expert! 🏆" : "Learner! 📖";
-            document.getElementById('q-text').innerHTML = `Quiz Done!<br>Score: ${userScore}/10<br>${rank}`;
+            document.getElementById('q-text').innerHTML = `Quiz Done!<br>Score: ${userScore}/10`;
             document.getElementById('quiz-controls').style.display = 'none';
             fb.innerHTML = "";
-            updateProgress();
         }
     }, 1000);
 }
 
+// --- Wiki & Lab Function ---
 function openWiki(topic) {
     const data = wikiDetails[topic];
-    document.getElementById('wikiBody').innerHTML = `<h1>${data.title}</h1><p style='line-height:1.8; font-size:1.1rem;'>${data.content}</p>`;
+    document.getElementById('wikiBody').innerHTML = `<h1>${data.title}</h1><p>${data.content}</p>`;
     document.getElementById('wikiOverlay').classList.add('active');
-    if (!unlockedWikis.has(topic)) {
-        unlockedWikis.add(topic);
-        masteredCount++;
-        updateProgress();
-    }
+    handleMastery(topic);
 }
-
-function closeWiki() { document.getElementById('wikiOverlay').classList.remove('active'); }
-
-function askSuggested(text) {
-    addUserMsg(text);
-    processInput(text.toLowerCase());
-}
-
-document.getElementById('sendBtn').onclick = () => {
-    const input = document.getElementById('userInput');
-    const text = input.value.trim();
-    if(!text) return;
-    addUserMsg(text);
-    processInput(text.toLowerCase());
-    input.value = "";
-};
-
-function processInput(text) {
-    setTimeout(() => {
-        // Default response if no keyword is found
-        let reply = "That's an interesting question! My database is currently focused on **AI Basics, the SPEC rule, and Web Dev**. Try asking about those keywords!";
-        
-        // Keyword Matching Algorithm
-        for (let item of customQA) {
-            if (item.k.some(keyword => text.includes(keyword))) { 
-                reply = item.a; 
-                break; 
-            }
-        }
-        addBotMsg(reply);
-    }, 600);
-}
-
-function updateProgress() {
-    document.getElementById('mastered-count').innerText = masteredCount;
-    let percent = (masteredCount / 3) * 100;
-    document.getElementById('progress-fill').style.width = percent + "%";
-}
-
-function addBotMsg(text) {
-    const d = document.getElementById('chatDisplay');
-    const m = document.createElement('div');
-    m.className = "msg bot"; m.innerHTML = `✨ <strong>TalkBot:</strong><br>${text}`;
-    d.appendChild(m); d.scrollTo({top: d.scrollHeight, behavior: 'smooth'});
-}
-
-function addUserMsg(text) {
-    const d = document.getElementById('chatDisplay');
-    const m = document.createElement('div');
-    m.className = "msg user"; m.innerText = text;
-    d.appendChild(m); d.scrollTo({top: d.scrollHeight, behavior: 'smooth'});
-}
-
-function resetChat() { location.reload(); }
-
-window.onload = () => {
-    addBotMsg("Hi! 🎓 I'm TalkBot. Ask me anything about AI or try the quiz!");
-    document.getElementById('q-text').innerText = quizData[0].q;
-};
-function improvePrompt() {
-    const labText = document.getElementById('lab-text');
-    // 模拟改写过程
-    labText.innerHTML = "<i>Analyzing... Applying SPEC...</i>";
-    
-    setTimeout(() => {
-        labText.innerHTML = `
-            <b style="color:var(--primary)">Improved:</b><br>
-            "Act as a <b>[Persona]</b> creative writer. 
-            Write a <b>[Specific]</b> 200-word mystery story about a detective cat 
-            <b>[Example]</b> in the style of Sherlock Holmes, 
-            <b>[Constraint]</b> without using the word 'meow'."
-        `;
-        addBotMsg("See the difference? The improved prompt uses **SPEC** to give the AI clear boundaries and a role!");
-    }, 1500);
-}
-// New Data for the 4 Experiments
-const labExperiments = [
-    {
-        title: "Experiment 1: The Persona Shift",
-        bad: "Write a healthy recipe.",
-        good: "Act as a **[Persona]** professional nutritionist. Write a **[Specific]** 500-calorie Mediterranean breakfast recipe using only **[Constraints]** 5 ingredients.",
-        lesson: "Adding a Persona makes the AI sound like an expert rather than a generic search engine."
-    },
-    {
-        title: "Experiment 2: Context is King",
-        bad: "Explain gravity.",
-        good: "Explain gravity **[Purpose]** to a 5-year-old child using **[Example]** a falling apple and a trampoline to make it easy to visualize.",
-        lesson: "Defining your audience (Purpose) changes the complexity level of the answer."
-    },
-    {
-        title: "Experiment 3: The Example Boost",
-        bad: "Write a business email.",
-        good: "Write a formal email to a client. **[Example]** Use a tone similar to: 'Dear [Name], I am writing to follow up...' but make it more enthusiastic.",
-        lesson: "Providing a sample 'tone' or format (Example) helps the AI match your specific style."
-    },
-    {
-        title: "Experiment 4: Strict Constraints",
-        bad: "Summarize this book.",
-        good: "Summarize the book 'The Great Gatsby' **[Constraints]** in exactly 3 bullet points, using no more than 20 words per bullet.",
-        lesson: "Constraints prevent the AI from rambling and keep the output focused."
-    }
-];
 
 function openLab() {
     let labHTML = `
-        <h1 style="color:var(--primary)">🔬 Prompt Lab: SPEC Playground</h1>
-        <p>Select an experiment to see how the <b>S.P.E.C. Rule</b> transforms a 'Bad Prompt' into a 'Pro Prompt'.</p>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px;">
-            ${labExperiments.map((exp, index) => `
-                <button class="suggest-item" onclick="runExperiment(${index})" style="margin:0; height:auto; padding:15px;">
-                    <b>${exp.title}</b>
-                </button>
-            `).join('')}
+        <h1>🔬 Prompt Lab</h1>
+        <p>Select an experiment to see the <b>S.P.E.C. Rule</b> in action:</p>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:20px 0;">
+            ${labExperiments.map((exp, i) => `<button class="suggest-item" onclick="runExp(${i})">${exp.title}</button>`).join('')}
         </div>
-        <div id="experiment-result" style="margin-top: 25px; padding: 20px; background: #f9f9f9; border-radius: 20px; min-height: 100px; border: 1px dashed var(--primary); display:none;">
-        </div>
+        <div id="exp-res" style="display:none; padding:15px; background:#f0f0ff; border-radius:15px; border:1px dashed var(--primary);"></div>
     `;
     document.getElementById('wikiBody').innerHTML = labHTML;
     document.getElementById('wikiOverlay').classList.add('active');
 }
 
-function runExperiment(index) {
-    const exp = labExperiments[index];
-    const resultDiv = document.getElementById('experiment-result');
-    resultDiv.style.display = "block";
-    resultDiv.innerHTML = `
-        <h3 style="margin-top:0">${exp.title}</h3>
-        <p><b style="color:var(--accent)">Bad Prompt (Basic):</b><br> <span style="color:var(--text-muted)">"${exp.bad}"</span></p>
-        <p><b style="color:var(--success)">SPEC Prompt (Pro):</b><br> ${exp.good}</p>
-        <hr style="border:none; border-top:1px solid #eee; margin:15px 0;">
-        <p style="font-size:0.9rem;"><b>The Lesson:</b> ${exp.lesson}</p>
-    `;
-    
-    // Also notify the chat
-    addBotMsg(`You just completed **${exp.title}**! Check the Lesson note in the Lab to see why it worked.`);
+function runExp(i) {
+    const e = labExperiments[i];
+    const res = document.getElementById('exp-res');
+    res.style.display = "block";
+    res.innerHTML = `<b>${e.title}</b><br><small>Bad:</small> "${e.bad}"<br><br><small>SPEC:</small> ${e.good}<br><hr>${e.lesson}`;
+    addBotMsg(`Experiment **${e.title}** completed!`);
 }
 
-// Keep your existing openWiki, closeWiki, etc...
+function closeWiki() { document.getElementById('wikiOverlay').classList.remove('active'); }
+
+// --- Chat Logic ---
+function processInput(text) {
+    setTimeout(() => {
+        let reply = "Interesting! Try asking about **SPEC, Hallucinations, or HTML**.";
+        for (let item of customQA) {
+            if (item.k.some(kw => text.includes(kw))) { reply = item.a; break; }
+        }
+        addBotMsg(reply);
+    }, 600);
+}
+
+function askSuggested(text) { addUserMsg(text); processInput(text.toLowerCase()); }
+
+document.getElementById('sendBtn').onclick = () => {
+    const input = document.getElementById('userInput');
+    if(!input.value.trim()) return;
+    addUserMsg(input.value);
+    processInput(input.value.toLowerCase());
+    input.value = "";
+};
+
+// --- Helpers ---
+function handleMastery(id) {
+    if (!unlockedWikis.has(id)) {
+        unlockedWikis.add(id);
+        masteredCount++;
+        document.getElementById('mastered-count').innerText = masteredCount;
+        document.getElementById('progress-fill').style.width = (masteredCount / 4 * 100) + "%";
+    }
+}
+
+function addBotMsg(t) {
+    const d = document.getElementById('chatDisplay');
+    const m = document.createElement('div');
+    m.className = "msg bot"; m.innerHTML = `✨ <strong>TalkBot:</strong><br>${t}`;
+    d.appendChild(m); d.scrollTop = d.scrollHeight;
+}
+
+function addUserMsg(t) {
+    const d = document.getElementById('chatDisplay');
+    const m = document.createElement('div');
+    m.className = "msg user"; m.innerText = t;
+    d.appendChild(m); d.scrollTop = d.scrollHeight;
+}
+
+function resetChat() { location.reload(); }
+
+window.onload = () => {
+    addBotMsg("Welcome! I'm TalkBot. Ready to master AI?");
+    document.getElementById('q-text').innerText = quizData[0].q;
+};
